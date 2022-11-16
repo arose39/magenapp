@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">store_location_form.store_location_data_source</item>
+            <item name="deps" xsi:type="string">store_location_form.store_location_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Product Types</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">store_location_form</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back">
+                <url path="*/*/index"/>
+                <class>back</class>
+                <label translate="true">Back</label>
+            </button>
+            <button name="reset">
+                <class>reset</class>
+                <label translate="true">Reset</label>
+            </button>
+            <button name="delete" class="Palamarchuk\StoreLocator\Ui\Component\Control\StoreLocation\DeleteButton"/>
+            <button name="save" class="Palamarchuk\StoreLocator\Ui\Component\Control\StoreLocation\SaveButton"/>
+        </buttons>
+    </settings>
+    <dataSource name="store_location_data_source" component="Magento_Ui/js/form/provider">
+        <settings>
+            <submitUrl path="*/*/save"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">store_location_id</param>
+            </storageConfig>
+        </settings>
+        <dataProvider class="Palamarchuk\StoreLocator\Ui\DataProvider\StoreLocation\EditDataProvider"
+                      name="store_location_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>store_location_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <label translate="true">General</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <dataScope>general</dataScope>
+        </settings>
+
+
+        <field name="store_img" formElement="imageUploader" sortOrder="11">
+            <settings>
+                <label translate="true">Image</label>
+                <componentType>imageUploader</componentType>
+            </settings>
+            <formElements>
+                <imageUploader>
+                    <settings>
+                        <allowedExtensions>jpg jpeg gif png</allowedExtensions>
+                        <previewTmpl>Palamarchuk_StoreLocator/image-preview</previewTmpl>
+                        <maxFileSize>2097152</maxFileSize>
+                        <uploaderConfig>
+                            <param xsi:type="string" name="url">store_locations/store/upload</param>
+                        </uploaderConfig>
+                    </settings>
+                </imageUploader>
+            </formElements>
+        </field>
+
+        <field name="name" formElement="input" sortOrder="20">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">name</label>
+            </settings>
+        </field>
+        <field name="store_url_key" formElement="input" sortOrder="21">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Unique url store key</label>
+            </settings>
+        </field>
+
+        <field name="description" formElement="input" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">description</label>
+            </settings>
+        </field>
+        <field name="address" formElement="input" sortOrder="40">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">address</label>
+            </settings>
+        </field>
+        <field name="city" formElement="input" sortOrder="50">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">city</label>
+            </settings>
+        </field>
+        <field name="country" formElement="input" sortOrder="60">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">country (2 symbol)</label>
+            </settings>
+        </field>
+        <field name="state" formElement="input" sortOrder="70">
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">state (max 4 digits)</label>
+            </settings>
+        </field>
+        <field name="zip" formElement="input" sortOrder="80">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">zip code</label>
+            </settings>
+        </field>
+
+        <field name="phone" formElement="input" sortOrder="90">
+            <settings>
+                <validation>
+                    <rule name="international-phone-validation" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">phone in international format /n (+############)</label>
+            </settings>
+        </field>
+        <field name="latitude" formElement="input" sortOrder="110">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">latitude</label>
+            </settings>
+        </field>
+        <field name="longitude" formElement="input" sortOrder="120">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">longitude</label>
+            </settings>
+        </field>
+    </fieldset>
+
+    <fieldset name="work_schedule" sortOrder="1000">
+        <settings>
+            <label translate="true">Work Schedule</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <dataScope>work_schedule</dataScope>
+        </settings>
+
+        <container name="monday">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">monday</item>
+                    <item name="sortOrder" xsi:type="number">11</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <field name="monday_from" sortOrder="10" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="monday_to" sortOrder="11" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </container>
+        <container name="tuesday">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">tuesday</item>
+                    <item name="sortOrder" xsi:type="number">21</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <field name="tuesday_from" sortOrder="20" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="tuesday_to" sortOrder="21" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </container>
+        <container name="wednesday">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">wednesday</item>
+                    <item name="sortOrder" xsi:type="number">26</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <field name="wednesday_from" sortOrder="30" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="wednesday_to" sortOrder="31" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </container>
+        <container name="thursday">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">thursday</item>
+                    <item name="sortOrder" xsi:type="number">31</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <field name="thursday_from" sortOrder="40" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="thursday_to" sortOrder="41" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </container>
+        <container name="friday">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">friday</item>
+                    <item name="sortOrder" xsi:type="number">41</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <field name="friday_from" sortOrder="50" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="friday_to" sortOrder="51" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </container>
+        <container name="saturday">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">saturday</item>
+                    <item name="sortOrder" xsi:type="number">51</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <field name="saturday_from" sortOrder="60" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="saturday_to" sortOrder="61" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </container>
+        <container name="sunday">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">sunday</item>
+                    <item name="sortOrder" xsi:type="number">61</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <field name="sunday_from" sortOrder="70" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="sunday_to" sortOrder="71" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Palamarchuk\StoreLocator\Model\Config\Source\WorkScheduleTime"/>
+                            <caption translate="true">-- Please Select --</caption>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </container>
+    </fieldset>
+</form>

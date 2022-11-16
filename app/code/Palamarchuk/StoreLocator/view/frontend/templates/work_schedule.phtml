@@ -1,0 +1,32 @@
+<?php
+/** @var Magento\Framework\View\Element\Template $block */
+
+/** @var $viewModel Palamarchuk\StoreLocator\ViewModel\WorkScheduleViewModel */
+$workScheduleViewModel = $block->getWorkScheduleViewModel();
+
+/** @var \Palamarchuk\StoreLocator\Model\WorkSchedule $workSchedule */
+$workSchedule = $workScheduleViewModel->getStoreLocationWorkSchedule();
+?>
+<?php if ($workSchedule): ?>
+<table>
+    <tr><th>Day of week</th><th>Schedule</th></tr>
+    <tr><td>Monday</td><td><?= $workSchedule->getMonday()?></td></tr>
+    <tr><td>Tuesday</td><td><?= $workSchedule->getTuesday()?></td></tr>
+    <tr><td>Wednesday</td><td><?= $workSchedule->getWednesday()?></td></tr>
+    <tr><td>Thursday</td><td><?= $workSchedule->getThursday()?></td></tr>
+    <tr><td>Friday</td><td><?= $workSchedule->getFriday()?></td></tr>
+    <tr><td>Saturday</td><td><?= $workSchedule->getSaturday()?></td></tr>
+    <tr><td>Sunday</td><td><?= $workSchedule->getSunday()?></td></tr>
+</table>
+<?php else: ?>
+    <table>
+        <tr><th>Day of week</th><th>Schedule</th></tr>
+        <tr><td>Monday</td><td>schedule not assigned</td></tr>
+        <tr><td>Tuesday</td><td>schedule not assigned</td></tr>
+        <tr><td>Wednesday</td><td>schedule not assigned</td></tr>
+        <tr><td>Thursday</td><td>schedule not assigned</td></tr>
+        <tr><td>Friday</td><td>schedule not assigned</td></tr>
+        <tr><td>Saturday</td><td>schedule not assigned</td></tr>
+        <tr><td>Sunday</td><td>schedule not assigned</td></tr>
+    </table>
+<?php endif; ?>

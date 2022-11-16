@@ -1,0 +1,18 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface" type="Palamarchuk\StoreLocator\Model\StoreLocation"/>
+    <preference for="Palamarchuk\StoreLocator\Api\StoreLocationRepositoryInterface" type="Palamarchuk\StoreLocator\Model\StoreLocationRepository"/>
+    <preference for="Palamarchuk\StoreLocator\Api\StoreLocationSearchResultInterface" type="Palamarchuk\StoreLocator\Model\StoreLocationSearchResult"/>
+
+    <type name="Palamarchuk\StoreLocator\Model\StoreLocationRepository">
+        <plugin name="validate_phone_plugin" type="Palamarchuk\StoreLocator\Plugin\PhoneValidator" sortOrder="1"/>
+        <plugin name="add_geocode_plugin" type="Palamarchuk\StoreLocator\Plugin\Geocoder" sortOrder="2"/>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="LoadStoreLocations" xsi:type="object">Palamarchuk\StoreLocator\Console\Command\LoadStoreLocations</item>
+            </argument>
+        </arguments>
+    </type>
+    </config>

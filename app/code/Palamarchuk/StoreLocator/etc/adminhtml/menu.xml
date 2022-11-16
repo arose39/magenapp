@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Palamarchuk_StoreLocator::module" title="Store locations" module="Palamarchuk_StoreLocator"
+             sortOrder="71"
+             resource="Palamarchuk_StoreLocator::system"/>
+
+        <add id="Palamarchuk_StoreLocator::index" title="Show and edit stores" module="Palamarchuk_StoreLocator"
+             sortOrder="10"
+             action="store_locations/store/index" resource="Palamarchuk_StoreLocator::system"
+             parent="Palamarchuk_StoreLocator::module"/>
+
+        <add id="Palamarchuk_StoreLocator::module_configuration" title="Module configuration"
+             module="Palamarchuk_StoreLocator"
+             sortOrder="999" parent="Palamarchuk_StoreLocator::module"
+             action="adminhtml/system_config/edit/section/store_locator/"
+             resource="Palamarchuk_StoreLocator::system"/>
+
+
+    </menu>
+</config>

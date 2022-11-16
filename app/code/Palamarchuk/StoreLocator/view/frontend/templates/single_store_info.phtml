@@ -1,0 +1,44 @@
+<?php
+/** @var Magento\Framework\View\Element\Template $block */
+
+/** @var $viewModel Palamarchuk\StoreLocator\ViewModel\SingleStoreViewModel */
+$storeViewModel = $block->getSingleStoreViewModel();
+
+/** @var $viewModel Palamarchuk\StoreLocator\ViewModel\ModuleConfigViewModel */
+$moduleConfigViewModel = $block->getModuleConfigViewModel();
+?>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Work schedule</th>
+            <th>Image</th>
+        </tr>
+        <?php
+
+        /** @var \Palamarchuk\StoreLocator\Model\StoreLocation $storeLocation */
+        $storeLocation = $storeViewModel->getSingleStoreLocation();
+        echo '<tr>' .
+            '<td>' . $storeLocation->getId() . '</td>' .
+            '<td>' . $storeLocation->getName() . '</td>' .
+            '<td>' . $storeLocation->getDescription() . '</td>' .
+            '<td>' .
+            $storeLocation->getAddress() . ", " .
+            $storeLocation->getCity() . ", " .
+            $storeLocation->getCountry() . ", " .
+            $storeLocation->getZip() .
+            '</td>' .
+            '<td>' . $storeLocation->getPhone() . '</td>' .
+            "<td><img src='" . $storeLocation->getStoreImageUrl() . "' alt='Image'></td>" .
+            '</tr>';
+
+        ?>
+    </table>
+    <img src="" alt="">
+
+<?php echo $block->getChildHtml('work-schedule'); ?>
+
+

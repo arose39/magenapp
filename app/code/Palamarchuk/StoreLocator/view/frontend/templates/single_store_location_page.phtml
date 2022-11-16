@@ -1,0 +1,11 @@
+<?php
+/** @var Magento\Framework\View\Element\Template $block */
+
+/** @var $viewModel Palamarchuk\StoreLocator\ViewModel\ModuleConfigViewModel */
+$moduleConfigViewModel = $block->getModuleConfigViewModel();
+?>
+<?php if ($moduleConfigViewModel->moduleIsEnabled()): ?>
+    <?php echo $block->getChildHtml('store-location-info'); ?>
+<?php else: ?>
+    <?php echo $block->getChildHtml('single-not-found-page'); ?>
+<?php endif; ?>

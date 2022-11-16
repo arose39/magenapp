@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <route url="/V1/store_locator" method="GET">
+        <service class="Palamarchuk\StoreLocator\Api\StoreLocationRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/store_locator/:id" method="GET">
+        <service class="Palamarchuk\StoreLocator\Api\StoreLocationRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/store_locator" method="POST">
+        <service class="Palamarchuk\StoreLocator\Api\StoreLocationRepositoryInterface" method="saveFromApi"/>
+        <resources>
+            <resource ref="Palamarchuk_StoreLocator::create"/>
+        </resources>
+    </route>
+    <route url="/V1/store_locator/:id" method="POST">
+        <service class="Palamarchuk\StoreLocator\Api\StoreLocationRepositoryInterface" method="updateFromApi"/>
+        <resources>
+            <resource ref="Palamarchuk_StoreLocator::create"/>
+        </resources>
+    </route>
+    <route url="/V1/store_locator/:id" method="DELETE">
+        <service class="Palamarchuk\StoreLocator\Api\StoreLocationRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Palamarchuk_StoreLocator::delete"/>
+        </resources>
+    </route>
+</routes>

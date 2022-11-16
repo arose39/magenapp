@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="store_locations_entity" resource="default" engine="innodb" comment="Catalog Product Table">
+        <column xsi:type="int" name="store_location_id" unsigned="true" nullable="false" identity="true"
+                comment="store locations entity ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Store Name"/>
+        <column xsi:type="varchar" name="store_url_key" nullable="true" length="255" comment="Unique url fo distinct store"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Store Name"/>
+        <column xsi:type="varchar" name="store_img" nullable="true" length="255" comment="Store Image"/>
+        <column xsi:type="varchar" name="address" nullable="false" length="255" comment="House number adn Street"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="255" comment="city"/>
+        <column xsi:type="varchar" name="country" nullable="false" length="2" comment="Country two letters identifier"/>
+        <column xsi:type="int" name="state" nullable="true" unsigned="true" comment="State identifier"/>
+        <column xsi:type="varchar" name="zip" nullable="false" length="16" comment="zip code"/>
+        <column xsi:type="varchar" name="phone" nullable="false" length="255" comment="Phone number"/>
+        <column xsi:type="decimal" name="latitude" nullable="true" precision="8" scale="6" comment="Geographical latitude"/>
+        <column xsi:type="decimal" name="longitude" nullable="true" precision="9" scale="6" comment="Geographical longitude"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Update Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="store_location_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="STORE_LOCATIONS_ENTITY_STORE_URL_KEY">
+            <column name="store_url_key"/>
+        </constraint>
+        <index referenceId="STORE_LOCATIONS_ENTITY_NAME" indexType="btree">
+            <column name="name"/>
+        </index>
+    </table>
+    <table name="store_work_schedule" resource="default" engine="innodb" comment="Catalog Product Table">
+        <column xsi:type="int" name="work_schedule_id" unsigned="true" nullable="false" identity="true"
+                comment="work schedule entity ID"/>
+        <column xsi:type="int" name="store_location_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="store location entity ID"/>
+        <column xsi:type="varchar" name="monday" nullable="true" length="255" comment="Store Name"/>
+        <column xsi:type="varchar" name="tuesday" nullable="true" length="255" comment="Store Name"/>
+        <column xsi:type="varchar" name="wednesday" nullable="true" length="255" comment="Store Name"/>
+        <column xsi:type="varchar" name="thursday" nullable="true" length="255" comment="Store Name"/>
+        <column xsi:type="varchar" name="friday" nullable="true" length="255" comment="Store Name"/>
+        <column xsi:type="varchar" name="saturday" nullable="true" length="255" comment="Store Name"/>
+        <column xsi:type="varchar" name="sunday" nullable="true" length="255" comment="Store Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="work_schedule_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_C3C0006759C73D20DF2B4999BC0188DD"
+                    table="store_work_schedule" column="store_location_id" referenceTable="store_locations_entity"
+                    referenceColumn="store_location_id" onDelete="CASCADE"/>
+    </table>
+</schema>

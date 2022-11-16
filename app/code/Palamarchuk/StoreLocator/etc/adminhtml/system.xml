@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="store_locator" translate="label" sortOrder="9999">
+            <label>Store locator</label>
+        </tab>
+        <section id="store_locator" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <label>Store Locator</label>
+            <tab>store_locator</tab>
+            <resource>Palamarchuk_StoreLocator::system</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>General</label>
+                <field id="module_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable module functionality</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Disable or enable module functionality on frontend]]></comment>
+                </field>
+                <field id="map_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable map</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Disable or enable map on frontend]]></comment>
+                    <depends>
+                        <field id="module_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="check_addres_is_real_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable checking address is real or not</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Disable checking address is real or not]]></comment>
+                    <depends>
+                        <field id="module_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="map_setting" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Map Settings</label>
+                <depends>
+                    <field id="store_locator/general/module_enabled">1</field>
+                    <field id="store_locator/general/map_enabled">1</field>
+                </depends>
+                <field id="api_key" translate="label comment" type="text" sortOrder="20" showInWebsite="1"
+                       showInStore="1" showInDefault="1" canRestore="1">
+                    <label>Google API Key</label>
+                    <comment>
+                        <![CDATA[Get Google Map API <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">here</a>.]]></comment>
+                </field>
+
+                <field id="zoom_default" translate="label comment" type="text" sortOrder="60" showInWebsite="1"
+                       showInStore="1" showInDefault="1" canRestore="1">
+                    <label>Zoom Default</label>
+                    <validate>validate-zero-or-greater</validate>
+                    <comment><![CDATA[Default zoom when loading the map.]]></comment>
+                </field>
+
+                <field id="map_default_latitude" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Latitude</label>
+                </field>
+                <field id="map_default_longitude" translate="label" type="text" sortOrder="15" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Longitude</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

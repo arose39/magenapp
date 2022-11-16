@@ -1,0 +1,83 @@
+<div class="page-title-wrapper">
+    <h1 class="page-title">
+        <span class="base" data-ui-id="page-title-wrapper">Whoops, our bad...</span></h1>
+</div>
+<div class="page messages">
+    <div data-placeholder="messages"></div>
+    <div data-bind="scope: 'messages'">
+        <!-- ko if: cookieMessages && cookieMessages.length > 0 --><!-- /ko -->
+
+        <!-- ko if: messages().messages && messages().messages.length > 0 --><!-- /ko -->
+    </div>
+
+</div>
+<div class="columns">
+    <div class="column main"><input name="form_key" type="hidden" value="bqxXOOJkBcKJY7fn">
+        <div id="authenticationPopup" data-bind="scope:'authenticationPopup', style: {display: 'none'}"
+             style="display: none;">
+            <script>window.authenticationPopup = {
+                    "autocomplete": "off",
+                    "customerRegisterUrl": "http:\/\/mageapp.dev.com\/customer\/account\/create\/",
+                    "customerForgotPasswordUrl": "http:\/\/mageapp.dev.com\/customer\/account\/forgotpassword\/",
+                    "baseUrl": "http:\/\/mageapp.dev.com\/",
+                    "customerLoginUrl": "http:\/\/mageapp.dev.com\/customer\/ajax\/login\/"
+                }</script>    <!-- ko template: getTemplate() -->
+
+
+            <!-- /ko -->
+
+        </div>
+
+
+        <dl>
+            <dt>The page you requested was not found, and we have a fine guess why.</dt>
+            <dd>
+                <ul class="disc">
+                    <li>If you typed the URL directly, please make sure the spelling is correct.</li>
+                    <li>If you clicked on a link to get here, the link is outdated.</li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt>What can you do?</dt>
+            <dd>Have no fear, help is near! There are many ways you can get back on track with Magento Store.</dd>
+            <dd>
+                <ul class="disc">
+                    <li><a href="#" onclick="history.go(-1); return false;">Go back</a> to the previous page.</li>
+                    <li>Use the search bar at the top of the page to search for your products.</li>
+                    <li>Follow these links to get you back on track!<br><a href="http://mageapp.dev.com/">Store
+                            Home</a> <span class="separator">|</span> <a
+                            href="http://mageapp.dev.com/customer/account/">My Account</a></li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
+    <div class="sidebar sidebar-additional">
+        <div class="block block-compare" data-bind="scope: 'compareProducts'" data-role="compare-products-sidebar">
+            <div class="block-title">
+                <strong id="block-compare-heading" role="heading" aria-level="2">Compare Products</strong>
+                <span class="counter qty no-display"
+                      data-bind="text: compareProducts().countCaption, css: {'no-display': !compareProducts().count}"></span>
+            </div>
+            <!-- ko if: compareProducts().count --><!-- /ko -->
+            <!-- ko ifnot: compareProducts().count -->
+            <div class="empty">You have no items to compare.</div>
+            <!-- /ko -->
+        </div>
+
+        <div class="block block-wishlist" data-bind="scope: 'wishlist'">
+            <div class="block-title">
+                <strong role="heading" aria-level="2">My Wish List</strong>
+                <!-- ko if: wishlist().counter --><!-- /ko -->
+            </div>
+            <div class="block-content">
+                <strong class="subtitle">Last Added Items</strong>
+                <!-- ko if: wishlist().counter --><!-- /ko -->
+                <!-- ko ifnot: wishlist().counter -->
+                <div class="empty">You have no items in your wish list.</div>
+                <!-- /ko -->
+            </div>
+        </div>
+
+    </div>
+</div>

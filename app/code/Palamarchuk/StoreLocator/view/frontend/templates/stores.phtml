@@ -1,0 +1,83 @@
+<?php
+/** @var Magento\Framework\View\Element\Template $block */
+
+/** @var $viewModel Palamarchuk\StoreLocator\ViewModel\StoresViewModel */
+$storesViewModel = $block->getStoresViewModel();
+
+/** @var $viewModel Palamarchuk\StoreLocator\ViewModel\ModuleConfigViewModel */
+$moduleConfigViewModel = $block->getModuleConfigViewModel();
+?>
+
+    <?php if ($moduleConfigViewModel->mapIsEnabled()): ?>
+        <div id="gmap" style="width: 70%; height: 500px;"></div>
+        <script>
+            require([
+                "https://maps.googleapis.com/maps/api/js?key=<?= $moduleConfigViewModel->getMapApi() ?>"
+            ], function () {
+                var latitude = '<?= $moduleConfigViewModel->getMapLatitude() ?>',
+                    longitude = '<?= $moduleConfigViewModel->getMapLongitude() ?>';
+                var mapZoomDefault = <?= $moduleConfigViewModel->getMapZoomDefault() ?>;
+                var mapLatLng = new google.maps.LatLng(latitude, longitude);
+                var mapOptions = {
+                    zoom: mapZoomDefault,
+                    center: mapLatLng,
+                };
+
+                var map = new google.maps.Map(document.getElementById("gmap"), mapOptions);
+
+                function markerMap(latitude, longitude, addressTitle, map) {
+                    var mapLatLng = new google.maps.LatLng(latitude, longitude);
+                    var marker = new google.maps.Marker({
+                        position: mapLatLng,
+                        animation: google.maps.Animation.DROP
+                    });
+                    marker.setMap(map);
+
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: '<h3>' + addressTitle + '<h3>',
+                    });
+                    marker.addListener("click", () => {
+                        infoWindow.open(map, marker);
+                    });
+                }
+
+                <?php
+                foreach ($storesViewModel->getAllStoreLocations() as $storeLocation):?>
+                markerMap('<?=$storeLocation->getLatitude()?>',
+                    '<?=$storeLocation->getLongitude() ?>',
+                    '<?=$storeLocation->getAddress() ?>',
+                    map);
+                <?php endforeach; ?>
+            });
+        </script>
+    <?php endif; ?>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Work schedule</th>
+            <th>Store photo</th>
+            <th>More info</th>
+        </tr>
+        <?php
+        foreach ($storesViewModel->getPaginatedStoreLocations() as $storeLocation) {
+            echo '<tr>' .
+                '<td>' . $storeLocation->getName() . '</td>' .
+                '<td>' . $storeLocation->getDescription() . '</td>' .
+                '<td>' .
+                $storeLocation->getAddress() . ", " .
+                $storeLocation->getCity() . ", " .
+                $storeLocation->getCountry() . ", " .
+                $storeLocation->getZip() .
+                '</td>' .
+                '<td>' . $storeLocation->getPhone() . '</td>' .
+                "<td><img src='" . $storeLocation->getStoreImageUrl() . "' width='70'  alt='Image'></td>" .
+                "<td><a href='/store_locations/index/show/id/" . $storeLocation->getStoreUrlKey() . "'>More Info</a></td>" .
+                '</tr>';
+        }
+        ?>
+    </table>
+<?php echo $storesViewModel->getPager() ?>

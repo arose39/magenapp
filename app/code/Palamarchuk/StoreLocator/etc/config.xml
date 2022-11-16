@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <store_locator>
+            <general>
+                <module_enabled>1</module_enabled>
+                <map_enabled>1</map_enabled>
+                <check_addres_is_real_enabled>1</check_addres_is_real_enabled>
+            </general>
+            <map_setting>
+                <api_key>AIzaSyCG-ouEOlTbLBAQPoZtijw3lMhtXw5HraA</api_key>
+                <zoom_default>2</zoom_default>
+                <map_default_latitude>48.904383</map_default_latitude>
+                <map_default_longitude>24.768027</map_default_longitude>
+            </map_setting>
+        </store_locator>
+    </default>
+</config>

@@ -1,0 +1,45 @@
+{
+    "store_locations_entity": {
+        "column": {
+            "store_location_id": true,
+            "name": true,
+            "store_url_key": true,
+            "description": true,
+            "store_img": true,
+            "address": true,
+            "city": true,
+            "country": true,
+            "state": true,
+            "zip": true,
+            "phone": true,
+            "latitude": true,
+            "longitude": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "STORE_LOCATIONS_ENTITY_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "STORE_LOCATIONS_ENTITY_STORE_URL_KEY": true
+        }
+    },
+    "store_work_schedule": {
+        "column": {
+            "work_schedule_id": true,
+            "store_location_id": true,
+            "monday": true,
+            "tuesday": true,
+            "wednesday": true,
+            "thursday": true,
+            "friday": true,
+            "saturday": true,
+            "sunday": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_C3C0006759C73D20DF2B4999BC0188DD": true
+        }
+    }
+}

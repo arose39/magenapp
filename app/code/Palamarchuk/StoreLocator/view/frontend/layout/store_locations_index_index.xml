@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <referenceContainer name="content">
+        <block name="palamarchuk.allstores.page" template="Palamarchuk_StoreLocator::all_stores_location_page.phtml"
+               cacheable="false">
+            <arguments>
+                <argument name="module_config_view_model" xsi:type="object">
+                    Palamarchuk\StoreLocator\ViewModel\ModuleConfigViewModel
+                </argument>
+            </arguments>
+            <container name="all_store_locations_info" as="all-store-locations-info">
+                <block name="palamarchuk.stores.viewmodel" template="Palamarchuk_StoreLocator::stores.phtml"
+                       cacheable="false">
+                    <arguments>
+                        <argument name="stores_view_model" xsi:type="object">
+                            Palamarchuk\StoreLocator\ViewModel\StoresViewModel
+                        </argument>
+                        <argument name="module_config_view_model" xsi:type="object">
+                            Palamarchuk\StoreLocator\ViewModel\ModuleConfigViewModel
+                        </argument>
+                    </arguments>
+                </block>
+            </container>
+            <container name="all_not_found_page" as="all-not-found-page">
+                <block name="palamarchuk.single.not.found" template="Palamarchuk_StoreLocator::not_found_page.phtml"
+                       cacheable="true">
+                </block>
+            </container>
+        </block>
+    </referenceContainer>
+</page>
