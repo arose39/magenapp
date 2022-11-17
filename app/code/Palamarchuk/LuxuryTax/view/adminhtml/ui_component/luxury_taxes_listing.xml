@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">luxury_taxes_listing.luxury_taxes_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add New</label>
+            </button>
+        </buttons>
+        <spinner>luxury_taxes_columns</spinner>
+        <deps>
+            <dep>luxury_taxes_listing.luxury_taxes_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="nameOfDataSource">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="name" xsi:type="string">luxury_taxes_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">luxury_tax_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">luxury_tax_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="luxury_tax_id" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+                    <caption translate="true">All luxury taxes</caption>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_location_id</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <massaction name="listing_massaction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
+                </item>
+            </argument>
+            <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="url" path="store_locations/store/massDelete"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete store location</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+        </massaction>
+
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="store_location_columns">
+
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
+                    <item name="indexField" xsi:type="string">store_location_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+
+        <column name="store_location_id" sortOrder="10">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="name" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+            </settings>
+        </column>
+        <column name="description" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">Description</label>
+            </settings>
+        </column>
+        <column name="phone" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">Phone number</label>
+            </settings>
+        </column>
+        <column name="city" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">City</label>
+            </settings>
+        </column>
+        <column name="store_img" class="Palamarchuk\StoreLocator\Ui\Component\Listing\Columns\StoreImage" component="Magento_Ui/js/grid/columns/thumbnail">
+            <settings>
+                <label translate="true">Photo</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Palamarchuk\StoreLocator\Ui\Component\Listing\Columns\StoreLocationActions">
+            <settings>
+                <indexField>id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

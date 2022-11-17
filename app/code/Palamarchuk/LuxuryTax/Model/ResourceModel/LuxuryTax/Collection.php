@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Palamarchuk\LuxuryTax\Model\ResourceModel\StoreLocation;
+namespace Palamarchuk\LuxuryTax\Model\ResourceModel\LuxuryTax;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Palamarchuk\LuxuryTax\Model\LuxuryTax;
