@@ -17,7 +17,7 @@ class PhoneValidator
 
     public function beforeSave(
         StoreLocationRepository $storeLocationRepository,
-        StoreLocation           $storeLocation
+        StoreLocation $storeLocation
     ): void {
         if (!$this->phoneValidator->validate($storeLocation->getPhone())) {
             $errorsMessage = 'Phone number must be in international format (e.g. +380633123456)';

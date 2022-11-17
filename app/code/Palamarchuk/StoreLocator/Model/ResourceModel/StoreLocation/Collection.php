@@ -6,7 +6,7 @@ namespace Palamarchuk\StoreLocator\Model\ResourceModel\StoreLocation;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Palamarchuk\StoreLocator\Model\StoreLocation;
-use \Palamarchuk\StoreLocator\Model\ResourceModel\StoreLocation as StoreLocationResource;
+use Palamarchuk\StoreLocator\Model\ResourceModel\StoreLocation as StoreLocationResource;
 
 class Collection extends AbstractCollection
 {

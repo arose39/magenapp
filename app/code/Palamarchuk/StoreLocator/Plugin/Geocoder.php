@@ -44,7 +44,7 @@ class Geocoder
      */
     public function beforeSave(
         StoreLocationRepository $storeLocationRepository,
-        StoreLocation           $storeLocation
+        StoreLocation $storeLocation
     ): void {
         if (!$storeLocation->getLatitude() || !$storeLocation->getLongitude()) {
             $fullAddress = $this->createFullAddress(
