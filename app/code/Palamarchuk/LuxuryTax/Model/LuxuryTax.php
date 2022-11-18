@@ -8,7 +8,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 class LuxuryTax extends AbstractExtensibleModel
 {
-    const ID = 'luxury_tax_id';
+    public const ID = 'luxury_tax_id';
 
     /**
      * @return mixed|null
