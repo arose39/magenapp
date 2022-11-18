@@ -64,12 +64,12 @@ class MassDelete extends Action
 
         return $resultRedirect->setUrl($this->_redirect->getRefererUrl());
     }
-// todo
-//    /**
-//     * @return bool
-//     */
-//    protected function _isAllowed()
-//    {
-//        return $this->_authorization->isAllowed('Palamarchuk_LuxuryTax::delete');
-//    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Palamarchuk_LuxuryTax::delete');
+    }
 }

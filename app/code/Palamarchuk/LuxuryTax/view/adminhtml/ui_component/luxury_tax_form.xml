@@ -95,9 +95,11 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="valdate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-number-range" xsi:type="string">0.01-99.99</rule>
                 </validation>
                 <dataType>text</dataType>
-                <label translate="true">Luxury tax amount (percents)</label>
+                <label translate="true">Luxury tax amount (percents) from 0.01 to 99.99</label>
             </settings>
         </field>
         <field name="tax_rate" sortOrder="40" formElement="select">
@@ -111,20 +113,7 @@
             <formElements>
                 <select>
                     <settings>
-                        <options>
-                            <option name="1" xsi:type="array">
-                                <item name="value" xsi:type="string">1</item>
-                                <item name="label" xsi:type="string">1</item>
-                            </option>
-                            <option name="2" xsi:type="array">
-                                <item name="value" xsi:type="string">2</item>
-                                <item name="label" xsi:type="string">2</item>
-                            </option>
-                            <option name="3" xsi:type="array">
-                                <item name="value" xsi:type="string">3</item>
-                                <item name="label" xsi:type="string">3</item>
-                            </option>
-                        </options>
+                        <options class="Palamarchuk\LuxuryTax\Model\Config\Source\TaxRates"/>
                         <caption translate="true">-- Please Select --</caption>
                     </settings>
                 </select>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Palamarchuk_LuxuryTax::index" title="Luxury taxes" module="Palamarchuk_LuxuryTax"
+             sortOrder="100"
+             action="luxurytax/luxurytax/index" resource="Palamarchuk_LuxuryTax::system"
+             parent="Magento_Tax::sales_tax"/>
+    </menu>
+</config>

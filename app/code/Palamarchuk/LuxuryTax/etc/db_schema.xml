@@ -7,7 +7,7 @@
         <column xsi:type="boolean" name="status" nullable="false" default="0" comment="Status active or not"/>
         <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Luxury tax Name"/>
         <column xsi:type="text" name="description" nullable="true" comment="Luxury tax description"/>
-        <column xsi:type="int" name="luxury_tax_amount" nullable="false" unsigned="true" comment="Percent of luxury tax"/>
+        <column xsi:type="float" name="luxury_tax_amount" nullable="false" unsigned="true" comment="Percent of luxury tax"/>
         <column xsi:type="int" name="tax_rate" nullable="true" unsigned="true" comment="Global tax rate"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Creation Time"/>
