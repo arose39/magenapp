@@ -51,7 +51,6 @@ class MassDelete extends Action
 
             $done = 0;
             foreach ($collection as $item) {
-                $item->deleteStoreImgFile();
                 $item->delete();
                 ++$done;
             }

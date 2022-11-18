@@ -41,10 +41,6 @@ class Save extends Action implements HttpPostActionInterface
         $resultRedirect = $this->resultRedirectFactory->create();
         $request = $this->getRequest();
         $requestData = $request->getPostValue();
-//        $luxuryTaxData = $requestData['general'];
-//        $luxuryTaxData['status'] = (bool) $luxuryTaxData['status'];
-//        $luxuryTaxData['luxury_tax_amount'] = (int) $luxuryTaxData['luxury_tax_amount'];
-//        $luxuryTaxData['tax_rate'] = (int) $luxuryTaxData['tax_rate'];
 
         if (!$request->isPost() || empty($requestData['general'])) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
@@ -57,19 +53,13 @@ class Save extends Action implements HttpPostActionInterface
         } catch (\Exception $e) {
             $luxuryTax = $this->luxuryTaxFactory->create();
         }
-        $luxuryTax->setName($requestData['general']['name']);
-        $luxuryTax->setDescription($requestData['general']['description']);
-        $luxuryTax->setStatus($requestData['general']['status']);
-        $luxuryTax->setLuxuryTaxAmount($requestData['general']['luxury_tax_amount']);
-        $luxuryTax->setTaxRate($requestData['general']['tax_rate']);
 
 
-//        $luxuryTax->setData($request->getPostValue());
-//        $luxuryTax = $this->luxuryTaxRepository->save($luxuryTax);
+        $luxuryTax->setData($request->getPostValue()['general']);
         try {
             $luxuryTax = $this->luxuryTaxRepository->save($luxuryTax);
             $this->processRedirectAfterSuccessSave($resultRedirect, $luxuryTax->getId());
-            $this->messageManager->addSuccessMessage(__('Store location and it work schedul were saved.'));
+            $this->messageManager->addSuccessMessage(__('Luxury tax were saved.'));
         } catch (\Exception $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
             $resultRedirect->setPath('*/*/new');

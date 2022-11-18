@@ -10,6 +10,11 @@ class LuxuryTax extends AbstractExtensibleModel
 {
     public const ID = 'luxury_tax_id';
 
+    public function _construct()
+    {
+        $this->_init(\Palamarchuk\LuxuryTax\Model\ResourceModel\LuxuryTax::class);
+    }
+
     /**
      * @return mixed|null
      */

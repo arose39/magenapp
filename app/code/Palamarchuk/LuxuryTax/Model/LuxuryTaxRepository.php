@@ -8,7 +8,6 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -22,7 +21,6 @@ class LuxuryTaxRepository
         private LuxuryTaxFactory      $luxuryTaxFactory,
         private CollectionFactory     $collectionFactory,
         private LuxuryTaxResource     $luxuryTaxResource,
-        private SearchCriteriaBuilder $searchCriteriaBuilder,
         private SearchResultFactory   $searchResultFactory,
         private CollectionProcessorInterface     $collectionProcessor
     ) {
