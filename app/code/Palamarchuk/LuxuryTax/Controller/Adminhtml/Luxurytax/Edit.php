@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Palamarchuk\StoreLocator\Controller\Adminhtml\Store;
+namespace Palamarchuk\LuxuryTax\Controller\Adminhtml\Luxurytax;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -11,38 +11,39 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Palamarchuk\StoreLocator\Model\StoreLocationRepository;
+use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
+
 
 class Edit extends Action
 {
-    private $storeLocationRepository;
+    private $luxuryTaxRepository;
 
     public function __construct(
         Context                 $context,
-        StoreLocationRepository $storeLocationRepository
+        LuxuryTaxRepository $luxuryTaxRepository
     )
     {
         parent::__construct($context);
-        $this->storeLocationRepository = $storeLocationRepository;
+        $this->luxuryTaxRepository = $luxuryTaxRepository;
     }
 
     public function execute(): ResultInterface
     {
         $id = (int) $this->getRequest()->getParam('id');
         try {
-            $storeLocation = $this->storeLocationRepository->get($id);
+            $luxuryTax = $this->luxuryTaxRepository->get($id);
 
             /** @var Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-            $resultPage->setActiveMenu('Palamarchuk_StoreLocator::module');
+            $resultPage->setActiveMenu('Palamarchuk_LuxuryTax::module');
             $resultPage->getConfig()
                 ->getTitle()
-                ->prepend(__('Edit store location: %store', ['store' => $storeLocation->getName()]));
+                ->prepend(__('Edit luxury tax: %tax', ['tax' => $luxuryTax->getName()]));
         } catch (NoSuchEntityException $e) {
             /** @var Redirect $result */
             $result = $this->resultRedirectFactory->create();
             $this->messageManager->addErrorMessage(
-                __('LuxuryTax with id "%value" does not exist.', ['value' => $id])
+                __('luxuryTax with id "%value" does not exist.', ['value' => $id])
             );
             $result->setPath('*/*');
         }

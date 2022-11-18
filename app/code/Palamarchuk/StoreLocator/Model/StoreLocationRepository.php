@@ -42,7 +42,7 @@ class StoreLocationRepository implements StoreLocationRepositoryInterface
         return $object;
     }
 
-    // If StoreLocation don`t has store_url_key, search by ID.
+    // If LuxuryTax don`t has store_url_key, search by ID.
     public function getByStoreUrlKey(string|int $storeUrlKey): StoreLocation
     {
         $object = $this->storeLocationFactory->create();
