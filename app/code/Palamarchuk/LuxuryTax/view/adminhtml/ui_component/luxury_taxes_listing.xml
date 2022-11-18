@@ -63,10 +63,10 @@
                     <item name="config" xsi:type="array">
                         <item name="type" xsi:type="string">delete</item>
                         <item name="label" xsi:type="string" translate="true">Delete</item>
-                        <item name="url" xsi:type="url" path="store_locations/store/massDelete"/>
+                        <item name="url" xsi:type="url" path="luxurytax/luxurytax/massDelete"/>
                         <item name="confirm" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Delete store location</item>
-                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
+                            <item name="title" xsi:type="string" translate="true">Delete luxury taxes</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to delete selected items?</item>
                         </item>
                     </item>
                 </argument>
@@ -75,23 +75,30 @@
 
         <paging name="listing_paging"/>
     </listingToolbar>
-    <columns name="store_location_columns">
+    <columns name="luxury_taxes_columns">
 
         <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                    <item name="indexField" xsi:type="string">store_location_id</item>
+                    <item name="indexField" xsi:type="string">luxury_tax_id</item>
                 </item>
             </argument>
         </selectionsColumn>
 
-        <column name="store_location_id" sortOrder="10">
+        <column name="luxury_tax_id" sortOrder="10">
             <settings>
                 <filter>text</filter>
                 <dataType>text</dataType>
                 <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="status" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">on/off</label>
             </settings>
         </column>
         <column name="name" sortOrder="30">
@@ -108,26 +115,21 @@
                 <label translate="true">Description</label>
             </settings>
         </column>
-        <column name="phone" sortOrder="50">
+        <column name="luxury_tax_amount" sortOrder="50">
             <settings>
                 <filter>text</filter>
                 <dataType>text</dataType>
-                <label translate="true">Phone number</label>
+                <label translate="true">Luxury tax percent</label>
             </settings>
         </column>
-        <column name="city" sortOrder="60">
+        <column name="tax_rate" sortOrder="60">
             <settings>
                 <filter>text</filter>
                 <dataType>text</dataType>
-                <label translate="true">City</label>
+                <label translate="true">Basic tax rate</label>
             </settings>
         </column>
-        <column name="store_img" class="Palamarchuk\StoreLocator\Ui\Component\Listing\Columns\StoreImage" component="Magento_Ui/js/grid/columns/thumbnail">
-            <settings>
-                <label translate="true">Photo</label>
-            </settings>
-        </column>
-        <actionsColumn name="actions" class="Palamarchuk\StoreLocator\Ui\Component\Listing\Columns\StoreLocationActions">
+        <actionsColumn name="actions" class="Palamarchuk\LuxuryTax\Ui\Component\Listing\Columns\LuxuryTaxActions">
             <settings>
                 <indexField>id</indexField>
             </settings>
