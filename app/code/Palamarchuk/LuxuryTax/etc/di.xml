@@ -18,9 +18,12 @@
         </arguments>
     </virtualType>
     <type name="Magento\Customer\Block\Adminhtml\Group\Edit\Form">
-        <plugin name="add_form_field" type="Palamarchuk\LuxuryTax\Plugin\CustomerGroupFormFieldPlugin" sortOrder="1"/>
+        <plugin name="Palamarchuk\LuxuryTax\Plugin\CustomerGroupFormFieldPlugin"
+                type="Palamarchuk\LuxuryTax\Plugin\CustomerGroupFormFieldPlugin" sortOrder="1"/>
     </type>
-<!--    <preference for="Magento\Customer\Block\Adminhtml\Group\Edit\Form"-->
-<!--                type="Palamarchuk\LuxuryTax\Block\Adminhtml\CustomerGroup\Edit\Form"/>-->
 
+    <type name="Magento\Customer\Api\GroupRepositoryInterface">
+        <plugin name="Palamarchuk\LuxuryTax\Plugin\CustomerGroupRepositoryPlugin"
+                type="Palamarchuk\LuxuryTax\Plugin\CustomerGroupRepositoryPlugin" sortOrder="1"/>
+    </type>
 </config>

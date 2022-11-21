@@ -24,12 +24,10 @@ class LuxuryTaxes implements OptionSourceInterface
        $luxuryTaxes = $this->luxuryTaxRepository->getList()->getItems();
         $taxes =[];
         $taxes[] = ['value' => '', 'label' => '--- please select ---'];
-
         foreach ($luxuryTaxes as $tax) {
             $taxes[] = ['value' => $tax->getId(), 'label' => $tax->getName()];
         }
 
         return $taxes;
-
     }
 }
