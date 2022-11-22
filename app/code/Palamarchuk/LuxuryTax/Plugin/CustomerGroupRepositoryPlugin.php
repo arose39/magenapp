@@ -80,9 +80,11 @@ class CustomerGroupRepositoryPlugin
     {
         $extensionAttributes = $group->getExtensionAttributes();
         $luxuryTaxId = $extensionAttributes->getLuxuryTaxId();
-        $groupModel = $this->groupRegistry->retrieve($group->getId());
-        $groupModel->setData('luxury_tax_id', $luxuryTaxId);
-        $this->groupResourceModel->save($groupModel);
+        if ($luxuryTaxId !== null){
+            $groupModel = $this->groupRegistry->retrieve($group->getId());
+            $groupModel->setData('luxury_tax_id', $luxuryTaxId);
+            $this->groupResourceModel->save($groupModel);
+        }
 
         return $result;
     }
