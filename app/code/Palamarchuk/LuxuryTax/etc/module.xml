@@ -3,6 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Palamarchuk_LuxuryTax">
         <sequence>
+            <module name="Magento_Customer"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Checkout"/>
         </sequence>

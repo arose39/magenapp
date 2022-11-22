@@ -21,7 +21,6 @@
         <plugin name="Palamarchuk\LuxuryTax\Plugin\CustomerGroupFormFieldPlugin"
                 type="Palamarchuk\LuxuryTax\Plugin\CustomerGroupFormFieldPlugin" sortOrder="1"/>
     </type>
-
     <type name="Magento\Customer\Api\GroupRepositoryInterface">
         <plugin name="Palamarchuk\LuxuryTax\Plugin\CustomerGroupRepositoryPlugin"
                 type="Palamarchuk\LuxuryTax\Plugin\CustomerGroupRepositoryPlugin" sortOrder="1"/>

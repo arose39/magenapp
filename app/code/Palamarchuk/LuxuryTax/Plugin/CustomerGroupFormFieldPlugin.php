@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Palamarchuk\LuxuryTax\Plugin;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Block\Adminhtml\Group\Edit\Form;
 use Palamarchuk\LuxuryTax\Model\Config\Source\LuxuryTaxes;
 
 class CustomerGroupFormFieldPlugin
@@ -16,21 +17,18 @@ class CustomerGroupFormFieldPlugin
     {
     }
 
-    public function afterSetForm(
-        \Magento\Customer\Block\Adminhtml\Group\Edit\Form $form): \Magento\Framework\Data\Form
+    public function afterSetForm(Form $form): \Magento\Framework\Data\Form
     {
         $form = $form->getForm();
         $fs = $form->getElement('base_fieldset');
 
         $fs->addField(
-            'luxury_tax_id',
+            "luxury_tax_id",
             'select',
             [
-                'name' => 'luxury_tax',
+                'name' => 'luxury_tax_id',
                 'label' => __('Luxury tax'),
                 'title' => __('Luxury tax'),
-                'class' => 'required-entry',
-                'required' => true,
                 'values' => $this->luxuryTaxes->toOptionArray(),
             ]
         );
@@ -46,7 +44,7 @@ class CustomerGroupFormFieldPlugin
         }
         $form->addValues(
             [
-                'luxury_tax_id' => $luxuryTaxIdValue,
+                'luxury_tax_id' => $luxuryTaxIdValue
             ]
         );
 
