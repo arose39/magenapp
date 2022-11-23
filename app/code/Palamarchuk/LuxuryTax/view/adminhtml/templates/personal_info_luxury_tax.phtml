@@ -1,0 +1,28 @@
+<?php
+/** @var Palamarchuk\LuxuryTax\Block\Adminhtml\CustomerPersonalInfoLuxuryTax $block */
+?>
+<div class="fieldset-wrapper customer-information-luxury-tax">
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?= $block->escapeHtml(__('Customer luxury tax information')) ?></span>
+    </div>
+    <table class="admin__table-secondary">
+        <tbody>
+        <tr>
+            <th><?= $block->escapeHtml(__('Luxury tax')) ?></th>
+            <td> <?= $block->escapeHtml($block->getCustomerLuxuryTaxName()) ?></td>
+        </tr>
+        <tr>
+            <th><?= $block->escapeHtml(__('Description')) ?></th>
+            <td> <?= $block->escapeHtml($block->getCustomerLuxuryTaxDescription()) ?></td>
+        </tr>
+        <tr>
+            <th><?= $block->escapeHtml(__('Amount')) ?></th>
+            <td> <?= $block->escapeHtml($block->getCustomerLuxuryTaxAmount()) ?>%</td>
+        </tr>
+        <tr>
+            <th><?= $block->escapeHtml(__('Status')) ?></th>
+            <td> <?= $block->escapeHtml($block->getCustomerLuxuryTaxStatus()) ?></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
