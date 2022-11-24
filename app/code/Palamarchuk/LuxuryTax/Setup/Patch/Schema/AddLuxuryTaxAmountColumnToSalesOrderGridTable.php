@@ -22,7 +22,8 @@ class AddLuxuryTaxAmountColumnToSalesOrderGridTable implements SchemaPatchInterf
             $this->moduleDataSetup->getTable('sales_order_grid'),
             'luxury_tax_amount',
             [
-                'type' => Table::TYPE_FLOAT,
+                'type' => Table::TYPE_DECIMAL,
+                'length' => '12,4',
                 'nullable' => true,
                 'after' => 'base_total_paid',
                 'comment'  => 'luxury tax amount',
