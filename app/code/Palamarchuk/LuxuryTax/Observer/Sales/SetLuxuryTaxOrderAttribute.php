@@ -35,6 +35,7 @@ class SetLuxuryTaxOrderAttribute implements \Magento\Framework\Event\ObserverInt
         //getLuxuryTaxAmount -> getLuxuryTaxRate . Wrong naming in luxuryTaxEntity
         $luxuryTaxPercent = $this->luxuryTaxRepository->get($luxuryTaxId)->getLuxuryTaxAmount() / 100;
         $luxuryTaxAmount = $orderSubtotal * $luxuryTaxPercent;
+        $luxuryTaxAmount = number_format($luxuryTaxAmount, 2, '.', ',');
         $order->setLuxuryTaxAmount((float)$luxuryTaxAmount);
         $order->save();
     }
