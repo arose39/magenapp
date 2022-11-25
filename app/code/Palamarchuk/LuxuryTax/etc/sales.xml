@@ -6,4 +6,9 @@
             <item name="luxury_tax" instance="Palamarchuk\LuxuryTax\Model\Total\LuxuryTaxTotal" sort_order="150"/>
         </group>
     </section>
+    <section name="order_invoice">
+        <group name="totals">
+            <item name="luxury_tax" instance="Palamarchuk\LuxuryTax\Model\InvoiceTotal\LuxuryTaxTotal" sort_order="170"/>
+        </group>
+    </section>
 </config>

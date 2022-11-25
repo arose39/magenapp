@@ -102,7 +102,6 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
                 'code' => 'luxury_tax',
                 'strong' => false,
                 'value' => $this->_order->getLuxuryTaxAmount(),
-                //'value' => $this->_source->getFee(),
                 'label' => __('Luxury tax'),
             ]
         );
