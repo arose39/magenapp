@@ -16,18 +16,21 @@
                     <label>less_100</label>
                     <comment>
                         <![CDATA[for cells with luxury tax less than 100.0]]></comment>
+                    <frontend_model>Palamarchuk\LuxuryTax\Block\ColorPicker</frontend_model>
                 </field>
                 <field id="bigger_100_less_1000" translate="label comment" type="text" sortOrder="20" showInWebsite="1"
                        showInStore="1" showInDefault="1" canRestore="1">
                     <label>bigger_100_less_1000</label>
                     <comment>
                         <![CDATA[for cells with luxury tax bigger than 100.0 and less than 1000.0]]></comment>
+                    <frontend_model>Palamarchuk\LuxuryTax\Block\ColorPicker</frontend_model>
                 </field>
                 <field id="bigger_1000" translate="label comment" type="text" sortOrder="20" showInWebsite="1"
                        showInStore="1" showInDefault="1" canRestore="1">
                     <label>bigger_1000</label>
                     <comment>
                         <![CDATA[for cells with luxury tax bigger than 1000.0]]></comment>
+                    <frontend_model>Palamarchuk\LuxuryTax\Block\ColorPicker</frontend_model>
                 </field>
             </group>
         </section>
