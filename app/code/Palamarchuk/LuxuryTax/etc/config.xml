@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <luxury_tax>
+            <cells_colour_in_order_grid_settings>
+               <less_100>white</less_100>
+                <bigger_100_less_1000>yellow</bigger_100_less_1000>
+                <bigger_1000>green</bigger_1000>
+            </cells_colour_in_order_grid_settings>
+        </luxury_tax>
+    </default>
+</config>
