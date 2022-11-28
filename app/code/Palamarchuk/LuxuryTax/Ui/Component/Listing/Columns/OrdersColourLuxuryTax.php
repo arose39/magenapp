@@ -28,9 +28,9 @@ class OrdersColourLuxuryTax extends Column
         if (isset($dataSource['data']['items'])) {
 
             foreach ($dataSource['data']['items'] as & $item) {
-                $cellColour = $this->getLuxuryTaxCellColour($item['luxury_tax_amount']);
-                $item['luxury_tax_amount'] = "<div style='background-color:$cellColour'>" .
-                    $item['luxury_tax_amount'] .
+                $cellColour = $this->getLuxuryTaxCellColour($item['base_luxury_tax_amount']);
+                $item['base_luxury_tax_amount'] = "<div style='background-color:$cellColour'>" .
+                    $item['base_luxury_tax_amount'] .
                     '</div>';
 
             }

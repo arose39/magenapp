@@ -10,10 +10,11 @@ class LuxuryTaxTotal extends AbstractTotal
     {
         $order = $invoice->getOrder();
         $luxuryTaxAmount = $order->getLuxuryTaxAmount();
+        $baseLuxuryTaxAmount = $order->getBaseLuxuryTaxAmount();
         $invoice->setLuxuryTaxAmount($luxuryTaxAmount);
-        $invoice->setBaseLuxuryTaxAmount($luxuryTaxAmount);
+        $invoice->setBaseLuxuryTaxAmount($baseLuxuryTaxAmount);
         $invoice->setGrandTotal($invoice->getGrandTotal() + $luxuryTaxAmount);
-        $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $luxuryTaxAmount);
+        $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseLuxuryTaxAmount);
 
         return $this;
     }

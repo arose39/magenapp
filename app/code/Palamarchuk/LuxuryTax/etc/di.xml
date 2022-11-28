@@ -30,6 +30,7 @@
         <arguments>
             <argument name="columns" xsi:type="array">
                 <item name="luxury_tax_amount" xsi:type="string">sales_order.luxury_tax_amount</item>
+                <item name="base_luxury_tax_amount" xsi:type="string">sales_order.base_luxury_tax_amount</item>
             </argument>
         </arguments>
     </virtualType>

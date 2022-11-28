@@ -3,16 +3,20 @@
 namespace Palamarchuk\LuxuryTax\Model\Total;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\CurrencyFactory;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\QuoteValidator;
+use Magento\Store\Api\StoreManagementInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
 
 class LuxuryTaxTotal extends AbstractTotal
 {
     const NOT_LOGGED_IN_CUSTOMER_GROUP = 0;
+
     /**
      * Collect grand total address amount
      *
@@ -21,19 +25,15 @@ class LuxuryTaxTotal extends AbstractTotal
      * @param Total $total
      * @return $this
      */
-    protected $quoteValidator = null;
-    private $groupRepository;
-    private $luxuryTaxRepository;
+
 
     public function __construct(
-        QuoteValidator           $quoteValidator,
-        GroupRepositoryInterface $groupRepository,
-        LuxuryTaxRepository      $luxuryTaxRepository
+        protected QuoteValidator         $quoteValidator,
+        private StoreManagerInterface    $storeManager,
+        private GroupRepositoryInterface $groupRepository,
+        private LuxuryTaxRepository      $luxuryTaxRepository
     )
     {
-        $this->quoteValidator = $quoteValidator;
-        $this->groupRepository = $groupRepository;
-        $this->luxuryTaxRepository = $luxuryTaxRepository;
     }
 
     public function collect(
@@ -43,12 +43,16 @@ class LuxuryTaxTotal extends AbstractTotal
     )
     {
         parent::collect($quote, $shippingAssignment, $total);
-        $luxuryTaxAmount = $this->getLuxuryTaxAmount($quote);
-        $total->setTotalAmount('luxury_tax', $luxuryTaxAmount);
-        $total->setBaseTotalAmount('luxury_tax', $luxuryTaxAmount);
 
-        $total->setLuxuryTax($luxuryTaxAmount);
-        $total->setBaseLuxuryTax($luxuryTaxAmount);
+
+        $luxuryTaxAmount = $this->getLuxuryTaxAmount($quote);
+        $baseLuxuryTaxAmount = $this->convertToBaseCurrency($luxuryTaxAmount);
+
+        $total->setTotalAmount('luxury_tax', $luxuryTaxAmount);
+        $total->setBaseTotalAmount('luxury_tax', $baseLuxuryTaxAmount);
+
+        $total->setLuxuryTaxAmount($luxuryTaxAmount);
+        $total->setBaseLuxuryTaxAmount($baseLuxuryTaxAmount);
 
         return $this;
     }
@@ -84,12 +88,12 @@ class LuxuryTaxTotal extends AbstractTotal
     public function fetch(Quote $quote, Total $total)
     {
         $luxuryTaxAmount = $this->getLuxuryTaxAmount($quote);
-
+        $baseLuxuryTaxAmount = $this->convertToBaseCurrency($luxuryTaxAmount);
         return [
             'code' => 'luxury_tax',
             'title' => 'Luxury tax',
             'value' => $luxuryTaxAmount,
-            'base_value' => $luxuryTaxAmount
+            'base_value' => $baseLuxuryTaxAmount
         ];
     }
 
@@ -114,6 +118,21 @@ class LuxuryTaxTotal extends AbstractTotal
         //getLuxuryTaxAmount -> getLuxuryTaxRate . Wrong naming in luxuryTaxEntity
         $luxuryTaxPercent = $this->luxuryTaxRepository->get($luxuryTaxId)->getLuxuryTaxAmount() / 100;
 
-        return $quote->getBaseSubtotal() * $luxuryTaxPercent;
+        return $quote->getSubtotal() * $luxuryTaxPercent;
+    }
+
+    public function convertToBaseCurrency($amount)
+    {
+        $currentCurrencyCode = $this->storeManager
+            ->getStore()
+            ->getCurrentCurrency()
+            ->getCode();
+        $currencyRate = $this->storeManager
+            ->getStore()
+            ->getBaseCurrency()->getRate($currentCurrencyCode);
+
+        $baseAmount = $amount / $currencyRate;
+
+        return $baseAmount;
     }
 }
