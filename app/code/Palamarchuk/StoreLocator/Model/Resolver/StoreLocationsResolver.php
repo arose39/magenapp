@@ -10,7 +10,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Palamarchuk\StoreLocator\Model\ResourceModel\StoreLocation\CollectionFactory;
 use Palamarchuk\StoreLocator\Model\StoreLocation as StoreLocationModel;
 
-class StoreLocation implements ResolverInterface
+class StoreLocationsResolver implements ResolverInterface
 {
     public function __construct(
         private CollectionFactory $collectionFactory
@@ -36,19 +36,30 @@ class StoreLocation implements ResolverInterface
         $collection = $this->collectionFactory->create();
 
         if (empty($collection)) {
-            return ['items' => null];
+            return ['storeLocations' => []];
         }
 
-        $items = [];
+        $storeLocations = [];
 
         /** @var StoreLocationModel $storeLocation */
         foreach ($collection->getItems() as $storeLocation) {
-            $items[] = [
+            $storeLocations[] = [
                 'id' => $storeLocation->getId(),
                 'name' => $storeLocation->getName(),
+                'store_url_key' => $storeLocation->getName(),
+                'description' => $storeLocation->getStoreUrlKey(),
+                'store_img' => $storeLocation->getStoreImageUrl(),
+                'address' => $storeLocation->getAddress(),
+                'city' => $storeLocation->getCity(),
+                'country' => $storeLocation->getCountry(),
+                'state' => $storeLocation->getState(),
+                'zip' => $storeLocation->getZip(),
+                'phone' => $storeLocation->getPhone(),
+                'latitude' => $storeLocation->getLatitude(),
+                'longitude' => $storeLocation->getLongitude(),
             ];
         }
 
-        return ['items' => $items];
+        return ['storeLocations' => $storeLocations];
     }
 }

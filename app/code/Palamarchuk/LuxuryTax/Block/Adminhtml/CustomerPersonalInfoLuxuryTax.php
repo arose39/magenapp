@@ -83,5 +83,4 @@ class CustomerPersonalInfoLuxuryTax extends PersonalInfo
         }
         return $group;
     }
-
 }

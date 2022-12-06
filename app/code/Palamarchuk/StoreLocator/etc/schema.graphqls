@@ -1,25 +1,47 @@
 type Query {
-    storeLocations: StoreLocations @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\StoreLocation")
+    storeLocations: StoreLocations @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\StoreLocationsResolver")
 }
 
 type StoreLocations {
-    items: [StoreLocation]
+    storeLocations : [StoreLocation]
 }
 
 type StoreLocation {
     id: Int
     name: String
+    store_url_key: String
+    description: String
+    store_img: String
+    address: String
+    city: String
+    country: String
+    state: String
+    zip: String
+    phone: String
+    latitude: String
+    longitude: String
 }
 
 type Mutation {
-    createStoreLocation (input: StoreLocationInput! @doc(description: "An input object that defines the store location to be created.")): StoreLocationOutput @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\CreateStoreLocation")
-    updateStoreLocation (input: StoreLocationInput! @doc(description: "An input object that defines the store location to update.")): StoreLocationOutput @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\UpdateStoreLocation")
+    createStoreLocation (input: StoreLocationInput!): StoreLocationOutput @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\CreateStoreLocation")
+    updateStoreLocation (input: StoreLocationInput!): StoreLocationOutput @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\UpdateStoreLocation")
 }
-input StoreLocationInput @doc(description: "An input object that assigns or updates customer attributes.") {
-    id: Int @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
-    name: String @doc(description: "The customer's first name.")
+input StoreLocationInput {
+    id: Int
+    name: String
+    store_url_key: String
+    description: String
+    store_img: String
+    address: String
+    city: String
+    country: String
+    state: String
+    zip: String
+    phone: String
+    latitude: String
+    longitude: String
 }
 
-type StoreLocationOutput @doc(description: "Contains details about a newly-created or updated customer.") {
-    storeLocation : StoreLocation @doc(description: "Customer details after creating or updating a customer.")
+type StoreLocationOutput {
+    storeLocation : StoreLocation
 }

@@ -9,6 +9,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Model\ScopeInterface;
+use Palamarchuk\StoreLocator\Model\StoreLocation;
 use Palamarchuk\StoreLocator\Model\StoreLocationFactory;
 use Palamarchuk\StoreLocator\Model\StoreLocationRepository;
 
@@ -33,11 +34,11 @@ class CreateStoreLocation implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
-//        if (isset($args['input']['date_of_birth'])) {
-//            $args['input']['dob'] = $args['input']['date_of_birth'];
-//        }
-        $data = ['id' => $args['input']['id'], 'name' =>$args['input']['name']];
+        /** @var StoreLocation $storeLocation */
+        $storeLocation = $this->storeLocationFactory->create();
+        $storeLocation->setData($args['input']);
+        $result = $this->storeLocationRepository->save($storeLocation);
 
-        return  ['storeLocation' => $data];
+        return  ['storeLocation' => $result];
     }
 }
