@@ -2,11 +2,12 @@
 
 namespace Palamarchuk\LuxuryTax\Model\InvoiceTotal;
 
+use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\Order\Total\AbstractTotal;
 
 class LuxuryTaxTotal extends AbstractTotal
 {
-    public function collect(\Magento\Sales\Api\Data\InvoiceInterface $invoice)
+    public function collect(InvoiceInterface $invoice)
     {
         $order = $invoice->getOrder();
         $luxuryTaxAmount = $order->getLuxuryTaxAmount();

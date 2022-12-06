@@ -98,7 +98,10 @@ return [
                 ]
             ]
         ],
-        'allow_parallel_generation' => false
+        'allow_parallel_generation' => false,
+        'graphql' => [
+            'id_salt' => 'xfJ7o8IT6FFHJLQdTtNriK7gxFHHV51m'
+        ]
     ],
     'lock' => [
         'provider' => 'db'

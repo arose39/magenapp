@@ -1,0 +1,25 @@
+type Query {
+    storeLocations: StoreLocations @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\StoreLocation")
+}
+
+type StoreLocations {
+    items: [StoreLocation]
+}
+
+type StoreLocation {
+    id: Int
+    name: String
+}
+
+type Mutation {
+    createStoreLocation (input: StoreLocationInput! @doc(description: "An input object that defines the store location to be created.")): StoreLocationOutput @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\CreateStoreLocation")
+    updateStoreLocation (input: StoreLocationInput! @doc(description: "An input object that defines the store location to update.")): StoreLocationOutput @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\UpdateStoreLocation")
+}
+input StoreLocationInput @doc(description: "An input object that assigns or updates customer attributes.") {
+    id: Int @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    name: String @doc(description: "The customer's first name.")
+}
+
+type StoreLocationOutput @doc(description: "Contains details about a newly-created or updated customer.") {
+    storeLocation : StoreLocation @doc(description: "Customer details after creating or updating a customer.")
+}

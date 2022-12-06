@@ -28,6 +28,7 @@ class ColorPicker extends \Magento\Config\Block\System\Config\Form\Field
                 });
             });
             </script>';
+
         return $html;
     }
 }
