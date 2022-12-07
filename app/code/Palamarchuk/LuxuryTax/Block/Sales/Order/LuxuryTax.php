@@ -99,7 +99,7 @@ class LuxuryTax extends Template
      *
      * @return Tax
      */
-    public function initTotals(): self
+    public function initTotals(): static
     {
 
         $parent = $this->getParentBlock();

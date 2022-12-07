@@ -30,8 +30,7 @@ class StoreLocationsResolver implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): array
-    {
+    ) {
         $collection = $this->collectionFactory->create();
 
         if (empty($collection)) {

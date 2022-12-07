@@ -39,6 +39,7 @@ class UpdateStoreLocation implements ResolverInterface
         /** @var StoreLocation $storeLocation */
         $storeLocation = $this->storeLocationRepository->get($args['input']['id']);
         $storeLocation->setData($args['input']);
+        $storeLocation->setId($args['input']['id']);
         $result = $this->storeLocationRepository->save($storeLocation);
         // add alias 'id' to 'store_location_id'
         $result['id'] = $result->getId();

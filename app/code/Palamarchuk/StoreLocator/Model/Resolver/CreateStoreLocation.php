@@ -27,7 +27,7 @@ class CreateStoreLocation implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): array
+    )
     {
         if (empty($args['input']) || !is_array($args['input'])) {
             throw new GraphQlInputException(__('"input" value should be specified'));
