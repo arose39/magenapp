@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palamarchuk\LuxuryTax\Model\Total;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Framework\CurrencyFactory;
+use Magento\Framework\Phrase;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\QuoteValidator;
-use Magento\Store\Api\StoreManagementInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
 
@@ -40,24 +41,20 @@ class LuxuryTaxTotal extends AbstractTotal
         Quote                       $quote,
         ShippingAssignmentInterface $shippingAssignment,
         Total                       $total
-    )
+    ): LuxuryTaxTotal|static
     {
         parent::collect($quote, $shippingAssignment, $total);
-
-
         $luxuryTaxAmount = $this->getLuxuryTaxAmount($quote);
         $baseLuxuryTaxAmount = $this->convertToBaseCurrency($luxuryTaxAmount);
-
         $total->setTotalAmount('luxury_tax', $luxuryTaxAmount);
         $total->setBaseTotalAmount('luxury_tax', $baseLuxuryTaxAmount);
-
         $total->setLuxuryTaxAmount($luxuryTaxAmount);
         $total->setBaseLuxuryTaxAmount($baseLuxuryTaxAmount);
 
         return $this;
     }
 
-    protected function clearValues(Total $total)
+    protected function clearValues(Total $total): void
     {
         $total->setTotalAmount('subtotal', 0);
         $total->setBaseTotalAmount('subtotal', 0);
@@ -72,11 +69,7 @@ class LuxuryTaxTotal extends AbstractTotal
         $total->setSubtotalInclTax(0);
         $total->setBaseSubtotalInclTax(0);
     }
-    /**
-     * @param Quote $quote
-     * @param Total $total
-     * @return array|null
-     */
+
     /**
      * Assign subtotal amount and label to address object
      *
@@ -85,7 +78,7 @@ class LuxuryTaxTotal extends AbstractTotal
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(Quote $quote, Total $total)
+    public function fetch(Quote $quote, Total $total): array
     {
         $luxuryTaxAmount = $this->getLuxuryTaxAmount($quote);
         $baseLuxuryTaxAmount = $this->convertToBaseCurrency($luxuryTaxAmount);
@@ -100,14 +93,14 @@ class LuxuryTaxTotal extends AbstractTotal
     /**
      * Get Subtotal label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
-    public function getLabel()
+    public function getLabel(): Phrase
     {
         return __('Luxury tax');
     }
 
-    private function getLuxuryTaxAmount(Quote $quote)
+    private function getLuxuryTaxAmount(Quote $quote): float|int
     {
         if ($quote->getCustomerIsGuest()) {
             $customerGroupId = self::NOT_LOGGED_IN_CUSTOMER_GROUP;
@@ -121,7 +114,7 @@ class LuxuryTaxTotal extends AbstractTotal
         return $quote->getSubtotal() * $luxuryTaxPercent;
     }
 
-    public function convertToBaseCurrency($amount)
+    public function convertToBaseCurrency($amount): float|int
     {
         $currentCurrencyCode = $this->storeManager
             ->getStore()

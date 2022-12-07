@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palamarchuk\LuxuryTax\Block;
 
 class ColorPicker extends \Magento\Config\Block\System\Config\Form\Field
@@ -10,7 +12,7 @@ class ColorPicker extends \Magento\Config\Block\System\Config\Form\Field
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element): string
     {
         $html = $element->getElementHtml();
         $value = $element->getData('value');

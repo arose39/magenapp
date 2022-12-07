@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palamarchuk\LuxuryTax\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -9,8 +11,7 @@ class LuxuryTaxes implements OptionSourceInterface
 {
     public function __construct(
         private LuxuryTaxRepository $luxuryTaxRepository
-    )
-    {
+    ) {
     }
 
     /**
@@ -21,7 +22,7 @@ class LuxuryTaxes implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-       $luxuryTaxes = $this->luxuryTaxRepository->getList()->getItems();
+        $luxuryTaxes = $this->luxuryTaxRepository->getList()->getItems();
         $taxes =[];
         $taxes[] = ['value' => '', 'label' => 'without luxury tax'];
         foreach ($luxuryTaxes as $tax) {
@@ -30,9 +31,4 @@ class LuxuryTaxes implements OptionSourceInterface
 
         return $taxes;
     }
-
-//    public function getAllOptions(): array
-//    {
-//       return $this->toOptionArray();
-//    }
 }

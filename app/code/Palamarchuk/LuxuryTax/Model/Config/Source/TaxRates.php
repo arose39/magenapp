@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palamarchuk\LuxuryTax\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -9,8 +11,7 @@ class TaxRates implements OptionSourceInterface
 {
     public function __construct(
         private Rate $taxRatesModel
-    )
-    {
+    ) {
     }
 
     /**
@@ -28,6 +29,5 @@ class TaxRates implements OptionSourceInterface
         }
 
         return $taxes;
-
     }
 }

@@ -4,7 +4,6 @@ namespace Palamarchuk\StoreLocator\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Palamarchuk\StoreLocator\Model\ResourceModel\StoreLocation\CollectionFactory;
@@ -31,7 +30,7 @@ class StoreLocationsResolver implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    )
+    ): array
     {
         $collection = $this->collectionFactory->create();
 

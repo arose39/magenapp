@@ -17,12 +17,12 @@ abstract class GenericButton
     ) {
     }
 
-    public function getUrl($route = '', $params = [])
+    public function getUrl($route = '', $params = []): string
     {
         return $this->urlBuilder->getUrl($route, $params);
     }
 
-    public function getStoreLocationId()
+    public function getStoreLocationId(): mixed
     {
         $storeLocationId = (int)$this->request->getParam('id');
         if ($storeLocationId == null) {

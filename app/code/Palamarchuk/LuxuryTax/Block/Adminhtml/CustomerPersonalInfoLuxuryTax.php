@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Palamarchuk\LuxuryTax\Block\Adminhtml;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo;
+use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Address\Mapper;
+use Magento\Customer\Model\Logger;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
 use Palamarchuk\LuxuryTax\Model\LuxuryTax;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
 
@@ -17,19 +24,33 @@ class CustomerPersonalInfoLuxuryTax extends PersonalInfo
     protected $luxuryTaxRepository;
 
     public function __construct(
-        LuxuryTaxRepository                                 $luxuryTaxRepository,
-        \Magento\Backend\Block\Template\Context             $context,
-        AccountManagementInterface                          $accountManagement,
-        \Magento\Customer\Api\GroupRepositoryInterface      $groupRepository,
-        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Customer\Helper\Address                    $addressHelper, \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Registry                         $registry, Mapper $addressMapper,
-        \Magento\Framework\Api\DataObjectHelper             $dataObjectHelper,
-        \Magento\Customer\Model\Logger                      $customerLogger,
-        array                                               $data = [])
-    {
+        LuxuryTaxRepository                $luxuryTaxRepository,
+        Context                            $context,
+        AccountManagementInterface         $accountManagement,
+        GroupRepositoryInterface           $groupRepository,
+        CustomerInterfaceFactory           $customerDataFactory,
+        Address                            $addressHelper,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Registry                           $registry,
+        Mapper                             $addressMapper,
+        DataObjectHelper                   $dataObjectHelper,
+        Logger                             $customerLogger,
+        array                              $data = []
+    ) {
         $this->luxuryTaxRepository = $luxuryTaxRepository;
-        parent::__construct($context, $accountManagement, $groupRepository, $customerDataFactory, $addressHelper, $dateTime, $registry, $addressMapper, $dataObjectHelper, $customerLogger, $data);
+        parent::__construct(
+            $context,
+            $accountManagement,
+            $groupRepository,
+            $customerDataFactory,
+            $addressHelper,
+            $dateTime,
+            $registry,
+            $addressMapper,
+            $dataObjectHelper,
+            $customerLogger,
+            $data
+        );
     }
 
     public function getCustomerLuxuryTaxName(): string
@@ -56,8 +77,6 @@ class CustomerPersonalInfoLuxuryTax extends PersonalInfo
     {
         $customer = $this->getCustomer();
         if ($groupId = $customer->getId() ? $customer->getGroupId() : null) {
-
-
             if ($group = $this->getGroup($groupId)) {
                 $luxuryTaxId = (int)$group->getExtensionAttributes()->getLuxuryTaxId();
 
@@ -81,6 +100,7 @@ class CustomerPersonalInfoLuxuryTax extends PersonalInfo
         } catch (NoSuchEntityException $e) {
             $group = null;
         }
+
         return $group;
     }
 }

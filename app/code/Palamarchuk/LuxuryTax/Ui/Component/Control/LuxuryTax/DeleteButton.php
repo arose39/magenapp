@@ -10,7 +10,7 @@ use Palamarchuk\LuxuryTax\Ui\Component\Control\LuxuryTax\GenericButton;
 class DeleteButton extends GenericButton implements ButtonProviderInterface
 {
 
-    public function getButtonData()
+    public function getButtonData(): array
     {
         if ($this->getLuxuryTaxId()) {
             return [

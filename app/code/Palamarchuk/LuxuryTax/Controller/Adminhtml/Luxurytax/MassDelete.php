@@ -21,8 +21,9 @@ class MassDelete extends Action
     private $collectionFactory;
 
     /**
-     * @param Context     $context
-     * @param JsonFactory $resultJsonFactory
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,

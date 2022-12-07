@@ -15,7 +15,6 @@ use Palamarchuk\LuxuryTax\Model\LuxuryTax;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxFactory;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
 
-
 class Save extends Action implements HttpPostActionInterface
 {
     private LuxuryTaxRepository $luxuryTaxRepository;

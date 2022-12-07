@@ -21,7 +21,6 @@ class UpdateStoreLocation implements ResolverInterface
     ) {
     }
 
-
     /**
      * @throws NoSuchEntityException
      * @throws GraphQlInputException

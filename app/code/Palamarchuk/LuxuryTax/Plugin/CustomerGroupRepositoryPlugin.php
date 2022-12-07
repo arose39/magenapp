@@ -20,15 +20,13 @@ class CustomerGroupRepositoryPlugin
         protected GroupExtensionFactory                   $extensionFactory,
         protected RequestInterface $request,
         protected Group $groupResourceModel,
-    )
-    {
+    ) {
     }
 
     public function afterGetList(
         GroupRepositoryInterface    $groupRepository,
         GroupSearchResultsInterface $groupSearchResults
-    ): GroupSearchResultsInterface
-    {
+    ): GroupSearchResultsInterface {
         foreach ($groupSearchResults->getItems() as $group) {
             $this->afterGetById($groupRepository, $group);
         }
@@ -39,8 +37,7 @@ class CustomerGroupRepositoryPlugin
     public function afterGetById(
         GroupRepositoryInterface $groupRepository,
         GroupInterface           $group
-    ): GroupInterface
-    {
+    ): GroupInterface {
         $groupModel = $this->groupRegistry->retrieve($group->getId());
         $extensionAttributes = $group->getExtensionAttributes();
         $extensionAttributes->setLuxuryTaxId($groupModel->getData('luxury_tax_id'));
@@ -55,8 +52,7 @@ class CustomerGroupRepositoryPlugin
     public function beforeSave(
         GroupRepositoryInterface $groupRepository,
         GroupInterface           $group
-    ): array
-    {
+    ): array {
         $luxuryTaxId = $this->request->getParam('luxury_tax_id') ?? null;
         if ($luxuryTaxId !== null) {
             $customerGroupExtensionAttributes = $group->getExtensionAttributes() ?? $group->groupExtensionInterfaceFactory->create();
@@ -71,16 +67,14 @@ class CustomerGroupRepositoryPlugin
      * add luxury tax id to customer_group table from extension attribute
      * @throws AlreadyExistsException
      */
-    public function afterSave
-    (
+    public function afterSave(
         GroupRepositoryInterface $groupRepository,
         GroupInterface $result,
         GroupInterface           $group
-    ): GroupInterface
-    {
+    ): GroupInterface {
         $extensionAttributes = $group->getExtensionAttributes();
         $luxuryTaxId = $extensionAttributes->getLuxuryTaxId();
-        if ($luxuryTaxId !== null){
+        if ($luxuryTaxId !== null) {
             $groupModel = $this->groupRegistry->retrieve($group->getId());
             $groupModel->setData('luxury_tax_id', $luxuryTaxId);
             $this->groupResourceModel->save($groupModel);

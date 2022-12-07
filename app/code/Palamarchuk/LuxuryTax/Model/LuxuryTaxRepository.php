@@ -65,7 +65,6 @@ class LuxuryTaxRepository
         return $luxuryTax;
     }
 
-
     /**
      * @throws StateException
      */
@@ -79,7 +78,6 @@ class LuxuryTaxRepository
 
         return true;
     }
-
 
     /**
      * @throws NoSuchEntityException

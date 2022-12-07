@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palamarchuk\LuxuryTax\Observer\Sales;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
-use Psr\Log\LoggerInterface;
 
-class SetLuxuryTaxOrderAttribute implements \Magento\Framework\Event\ObserverInterface
+class SetLuxuryTaxOrderAttribute implements ObserverInterface
 {
     public const NOT_LOGGED_IN_CUSTOMER_GROUP = 0;
 

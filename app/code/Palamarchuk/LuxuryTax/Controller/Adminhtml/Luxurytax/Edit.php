@@ -13,7 +13,6 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
 
-
 class Edit extends Action
 {
     private $luxuryTaxRepository;
@@ -46,6 +45,8 @@ class Edit extends Action
                 __('luxuryTax with id "%value" does not exist.', ['value' => $id])
             );
             $result->setPath('*/*');
+
+            return $result;
         }
 
         return $resultPage;

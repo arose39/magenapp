@@ -9,7 +9,7 @@ use Magento\Ui\Component\Control\Container;
 
 class SaveButton extends GenericButton implements ButtonProviderInterface
 {
-    public function getButtonData()
+    public function getButtonData(): array
     {
         return [
             'label' => __('Save store location'),
@@ -35,7 +35,7 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
         ];
     }
 
-    protected function getOptions()
+    protected function getOptions(): array
     {
         $options[] = [
             'id_hard' => 'save_and_new',

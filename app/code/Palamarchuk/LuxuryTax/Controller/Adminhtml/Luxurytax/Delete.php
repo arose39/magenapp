@@ -12,15 +12,15 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Palamarchuk\LuxuryTax\Model\LuxuryTaxRepository;
 
-
 class Delete extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     private LuxuryTaxRepository $luxuryTaxRepository;
 
     public function __construct(
-        Context $context,
+        Context             $context,
         LuxuryTaxRepository $luxuryTaxRepository,
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->luxuryTaxRepository = $luxuryTaxRepository;
     }

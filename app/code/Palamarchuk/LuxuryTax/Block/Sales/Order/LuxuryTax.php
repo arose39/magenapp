@@ -1,13 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palamarchuk\LuxuryTax\Block\Sales\Order;
 
-class LuxuryTax extends \Magento\Framework\View\Element\Template
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Model\Order;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Tax\Block\Sales\Order\Tax;
+use Magento\Tax\Model\Config;
+
+class LuxuryTax extends Template
 {
     /**
      * Tax configuration model
      *
-     * @var \Magento\Tax\Model\Config
+     * @var Config
      */
     protected $_config;
 
@@ -17,18 +27,18 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
     protected $_order;
 
     /**
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     protected $_source;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param Context $context
+     * @param Config $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Tax\Model\Config $taxConfig,
+        Context $context,
+        Config $taxConfig,
         array $data = []
     ) {
         $this->_config = $taxConfig;
@@ -40,7 +50,7 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      */
-    public function displayFullSummary()
+    public function displayFullSummary(): bool
     {
         return true;
     }
@@ -48,13 +58,14 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
     /**
      * Get data (totals) source model
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
-    public function getSource()
+    public function getSource(): DataObject
     {
         return $this->_source;
     }
-    public function getStore()
+
+    public function getStore(): StoreInterface
     {
         return $this->_order->getStore();
     }
@@ -62,7 +73,7 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
     /**
      * @return Order
      */
-    public function getOrder()
+    public function getOrder(): Order
     {
         return $this->_order;
     }
@@ -70,7 +81,7 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
     /**
      * @return array
      */
-    public function getLabelProperties()
+    public function getLabelProperties(): array
     {
         return $this->getParentBlock()->getLabelProperties();
     }
@@ -78,7 +89,7 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
     /**
      * @return array
      */
-    public function getValueProperties()
+    public function getValueProperties(): array
     {
         return $this->getParentBlock()->getValueProperties();
     }
@@ -86,9 +97,9 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
     /**
      * Initialize all order totals relates with tax
      *
-     * @return \Magento\Tax\Block\Sales\Order\Tax
+     * @return Tax
      */
-    public function initTotals()
+    public function initTotals(): self
     {
 
         $parent = $this->getParentBlock();
@@ -97,7 +108,7 @@ class LuxuryTax extends \Magento\Framework\View\Element\Template
 
         $store = $this->getStore();
 
-        $luxuryTax = new \Magento\Framework\DataObject(
+        $luxuryTax = new DataObject(
             [
                 'code' => 'luxury_tax',
                 'strong' => false,
