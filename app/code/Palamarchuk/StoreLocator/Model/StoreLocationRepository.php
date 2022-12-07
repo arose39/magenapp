@@ -31,6 +31,9 @@ class StoreLocationRepository implements StoreLocationRepositoryInterface
     {
     }
 
+    /**
+     * @throws NoSuchEntityException
+     */
     public function get(int $id): StoreLocation
     {
         $object = $this->storeLocationFactory->create();

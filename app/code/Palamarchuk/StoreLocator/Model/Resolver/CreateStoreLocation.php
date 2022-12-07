@@ -38,6 +38,8 @@ class CreateStoreLocation implements ResolverInterface
         $storeLocation = $this->storeLocationFactory->create();
         $storeLocation->setData($args['input']);
         $result = $this->storeLocationRepository->save($storeLocation);
+        // add alias 'id' to 'store_location_id'
+        $result['id'] = $result->getId();
 
         return  ['storeLocation' => $result];
     }
