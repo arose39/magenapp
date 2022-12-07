@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
+
 
 namespace Palamarchuk\LuxuryTax\Block\Sales\Order;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Sales\Model\Order;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Tax\Block\Sales\Order\Tax;
 use Magento\Tax\Model\Config;
@@ -94,11 +93,7 @@ class LuxuryTax extends Template
         return $this->getParentBlock()->getValueProperties();
     }
 
-    /**
-     * Initialize all order totals relates with tax
-     *
-     * @return Tax
-     */
+
     public function initTotals(): static
     {
 

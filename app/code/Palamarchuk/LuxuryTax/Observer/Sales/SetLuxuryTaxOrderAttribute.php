@@ -32,7 +32,7 @@ class SetLuxuryTaxOrderAttribute implements ObserverInterface
         }else{
             $customerGroupId = $order->getCustomerGroupId();
         }
-        $luxuryTaxId = $this->groupRepository->getById($customerGroupId)->getExtensionAttributes()->getLuxuryTaxId();
+        $luxuryTaxId = (int)$this->groupRepository->getById($customerGroupId)->getExtensionAttributes()->getLuxuryTaxId();
         //getLuxuryTaxAmount -> getLuxuryTaxRate . Wrong naming in luxuryTaxEntity
         $luxuryTaxPercent = $this->luxuryTaxRepository->get($luxuryTaxId)->getLuxuryTaxAmount() / 100;
         $luxuryTaxAmount = $orderSubtotal * $luxuryTaxPercent;
