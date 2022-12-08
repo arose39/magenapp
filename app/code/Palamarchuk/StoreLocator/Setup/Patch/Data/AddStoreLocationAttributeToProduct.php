@@ -10,9 +10,10 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 use Palamarchuk\StoreLocator\Model\Attribute\Source\StoreLocationsOptions;
 
-class AddStoreLocationAttributeToProduct implements DataPatchInterface
+class AddStoreLocationAttributeToProduct implements DataPatchInterface, PatchRevertableInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -85,5 +86,13 @@ class AddStoreLocationAttributeToProduct implements DataPatchInterface
         ]);
 
         return $this;
+    }
+
+    public function revert()
+    {
+        $this->moduleDataSetup->getConnection()->startSetup();
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+        $eavSetup->removeAttribute(Product::ENTITY, 'store_location_id');
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 }

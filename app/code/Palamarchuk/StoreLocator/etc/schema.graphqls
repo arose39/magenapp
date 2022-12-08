@@ -45,3 +45,8 @@ input StoreLocationInput {
 type StoreLocationOutput {
     storeLocation : StoreLocation
 }
+
+type ProductInterface {
+    store_location_id: Int @resolver(class: "Palamarchuk\\StoreLocator\\Model\\Resolver\\ProductsStoreLocationId")
+}
+
