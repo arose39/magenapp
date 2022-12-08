@@ -66,3 +66,28 @@ latitude
 longitude
 }
 }
+
+query {
+products(
+filter: {}
+pageSize: 20
+currentPage: 1
+sort: { name: ASC }
+) {
+items {
+sku
+name
+store_location_id
+}
+# filters {
+#   name
+#   filter_items_count
+#   request_var
+#   filter_items {
+#     label
+#     value_string
+#     items_count
+#   }
+# }
+}
+}

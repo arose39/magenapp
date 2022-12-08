@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Palamarchuk\StoreLocator\Api\Data;
 
-use Palamarchuk\StoreLocator\Model\WorkSchedule;
-
 interface StoreLocationInterface
 {
 

@@ -10,49 +10,48 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface;
-use Palamarchuk\StoreLocator\Model\StoreLocation;
 use Palamarchuk\StoreLocator\Model\StoreLocationSearchResult;
 
 interface StoreLocationRepositoryInterface
 {
     /**
      * @param int $id
-     * @return StoreLocation
+     * @return \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface
      */
-    public function get(int $id): StoreLocation;
+    public function get(int $id): \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface;
 
     /**
-     * @param SearchCriteriaInterface|null $searchCriteria
-     * @return StoreLocationSearchResultInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
+     * @return \Palamarchuk\StoreLocator\Api\StoreLocationSearchResultInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null): StoreLocationSearchResultInterface;
 
     /**
-     * @param StoreLocation $storeLocation
-     * @return StoreLocation
+     * @param \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface $storeLocation
+     * @return \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface
      */
-    public function save(StoreLocation $storeLocation): StoreLocationInterface;
+    public function save(\Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface $storeLocation): \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface;
 
     /**
-     * @return StoreLocation
+     * @return \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function saveFromApi(): StoreLocation;
+    public function saveFromApi(): \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface;
 
     /**
      * @param int $id
-     * @return StoreLocation
+     * @return \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function updateFromApi(int $id): StoreLocation;
+    public function updateFromApi(int $id): \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface;
 
     /**
-     * @param StoreLocation $storeLocation
+     * @param \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface $storeLocation
      * @return bool
      */
-    public function delete(StoreLocation $storeLocation): bool;
+    public function delete(\Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface $storeLocation): bool;
 
     /**
      * @param int $id
