@@ -5,4 +5,8 @@
         <observer instance="Palamarchuk\LuxuryTax\Observer\Sales\SetLuxuryTaxOrderAttribute"
                   name="palamarchuk_luxury_tax_order_attribute_observer_sales_order_save_after"/>
     </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer instance="Palamarchuk\LuxuryTax\Observer\Sales\SetRefundedLuxuryTaxAmount"
+                  name="palamarchuk_luxury_tax_refund_observer_sales_order_creditmemo_save_after"/>
+    </event>
 </config>
