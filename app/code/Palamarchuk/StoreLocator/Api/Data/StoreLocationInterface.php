@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Palamarchuk\StoreLocator\Api\Data;
 
+use Palamarchuk\StoreLocator\Model\WorkSchedule;
+
 interface StoreLocationInterface
 {
 
@@ -38,7 +40,7 @@ interface StoreLocationInterface
      * @param string $value
      * @return $this
      */
-    public function setStoreUrlKey(string $value): StoreLocationInterface;
+    public function setStoreUrlKey(string $value): self;
 
     /**
      * @return string|null
@@ -158,5 +160,5 @@ interface StoreLocationInterface
     /**
      * @return \Palamarchuk\StoreLocator\Model\WorkSchedule|null
      */
-    public function getWorkSchedule(): ?WorkSchedule;
+    public function getWorkSchedule(): ?\Palamarchuk\StoreLocator\Model\WorkSchedule;
 }

@@ -145,7 +145,7 @@ class StoreLocationRepository implements StoreLocationRepositoryInterface
         return $storeLocation;
     }
 
-    public function save(StoreLocation $storeLocation): StoreLocation
+    public function save(StoreLocation|\Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface $storeLocation): StoreLocation
     {
         $this->storeLocationResource->save($storeLocation);
 
@@ -155,7 +155,7 @@ class StoreLocationRepository implements StoreLocationRepositoryInterface
     /**
      * @throws StateException
      */
-    public function delete(StoreLocation $storeLocation): bool
+    public function delete(StoreLocation|\Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface $storeLocation): bool
     {
         try {
             if ($storeLocation->getStoreImg()) {

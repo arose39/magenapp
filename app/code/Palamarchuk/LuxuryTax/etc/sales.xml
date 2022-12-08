@@ -11,4 +11,9 @@
             <item name="luxury_tax" instance="Palamarchuk\LuxuryTax\Model\InvoiceTotal\LuxuryTaxTotal" sort_order="170"/>
         </group>
     </section>
+    <section name="order_creditmemo">
+        <group name="totals">
+            <item name="luxury_tax" instance="Palamarchuk\LuxuryTax\Model\CreditMemoTotal\LuxuryTaxTotal" sort_order="170"/>
+        </group>
+    </section>
 </config>

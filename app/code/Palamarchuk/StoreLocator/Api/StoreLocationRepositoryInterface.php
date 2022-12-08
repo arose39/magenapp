@@ -24,7 +24,7 @@ interface StoreLocationRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Palamarchuk\StoreLocator\Api\StoreLocationSearchResultInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): StoreLocationSearchResultInterface;
+    public function getList(?SearchCriteriaInterface $searchCriteria = null): StoreLocationSearchResultInterface;
 
     /**
      * @param \Palamarchuk\StoreLocator\Api\Data\StoreLocationInterface $storeLocation

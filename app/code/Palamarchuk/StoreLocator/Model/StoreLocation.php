@@ -70,7 +70,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setName(string $value): StoreLocationInterface
+    public function setName(string $value): self
     {
         $this->setData("name", $value);
 
@@ -90,7 +90,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setStoreUrlKey(string $value): StoreLocationInterface
+    public function setStoreUrlKey(string $value): self
     {
         $this->setData("store_url_key", $value);
 
@@ -109,7 +109,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setDescription(string $value): StoreLocationInterface
+    public function setDescription(string $value): self
     {
         $this->setData("description", $value);
 
@@ -128,7 +128,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setStoreImg(string $value): StoreLocationInterface
+    public function setStoreImg(string $value): self
     {
         $this->setData("store_img", $value);
 
@@ -157,7 +157,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setAddress(string $value): StoreLocationInterface
+    public function setAddress(string $value): self
     {
         $this->setData('address', $value);
 
@@ -176,7 +176,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setCity(string $value): StoreLocationInterface
+    public function setCity(string $value): self
     {
         $this->setData('city', $value);
 
@@ -195,7 +195,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setCountry(string $value): StoreLocationInterface
+    public function setCountry(string $value): self
     {
         $this->setData('country', $value);
 
@@ -214,7 +214,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param int $value
      * @return $this
      */
-    public function setState(int $value): StoreLocationInterface
+    public function setState(int $value): self
     {
         $this->setData('state', $value);
 
@@ -233,7 +233,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param string $value
      * @return $this
      */
-    public function setZip(string $value): StoreLocationInterface
+    public function setZip(string $value): self
     {
         $this->setData('zip', $value);
 
@@ -252,7 +252,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param $value
      * @return $this
      */
-    public function setPhone($value): StoreLocationInterface
+    public function setPhone($value): self
     {
         $this->setData('phone', $value);
 
@@ -271,7 +271,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param float $value
      * @return $this
      */
-    public function setLatitude(float $value): StoreLocationInterface
+    public function setLatitude(float $value): self
     {
         $this->setData('latitude', $value);
 
@@ -290,7 +290,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
      * @param float $value
      * @return $this
      */
-    public function setLongitude(float $value): StoreLocationInterface
+    public function setLongitude(float $value): self
     {
         $this->setData('longitude', $value);
 
@@ -321,7 +321,7 @@ class StoreLocation extends AbstractExtensibleModel implements StoreLocationInte
     /**
      * @return WorkSchedule|null
      */
-    public function getWorkSchedule(): ?WorkSchedule
+    public function getWorkSchedule(): ?\Palamarchuk\StoreLocator\Model\WorkSchedule
     {
         try {
             $workSchedule = $this->workScheduleRepository->getByStoreLocationId((int)$this->getId());
