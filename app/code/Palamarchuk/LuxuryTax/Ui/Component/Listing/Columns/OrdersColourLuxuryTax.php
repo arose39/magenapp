@@ -17,8 +17,7 @@ class OrdersColourLuxuryTax extends Column
         UiComponentFactory $uiComponentFactory,
         array              $components = [],
         array              $data = []
-    )
-    {
+    ) {
         $this->config = $config;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
@@ -26,13 +25,11 @@ class OrdersColourLuxuryTax extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-
             foreach ($dataSource['data']['items'] as & $item) {
                 $cellColour = $this->getLuxuryTaxCellColour($item['base_luxury_tax_amount']);
                 $item['base_luxury_tax_amount'] = "<div style='background-color:$cellColour'>" .
                     $item['base_luxury_tax_amount'] .
                     '</div>';
-
             }
         }
 
@@ -41,7 +38,7 @@ class OrdersColourLuxuryTax extends Column
 
     private function getLuxuryTaxCellColour(?float $luxuryTaxAmount): string
     {
-        if ($luxuryTaxAmount === null){
+        if ($luxuryTaxAmount === null) {
             return $this->config->getLess100Colour();
         }
 

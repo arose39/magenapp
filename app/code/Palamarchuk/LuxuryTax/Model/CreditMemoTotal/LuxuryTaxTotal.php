@@ -41,15 +41,4 @@ class LuxuryTaxTotal extends AbstractTotal
 
         return $this;
     }
-
-    public function fetch(): array
-    {
-
-        return [
-            'code' => 'luxury_tax',
-            'title' => 'Luxury tax',
-            'value' => 111,
-            'base_value' => 111
-        ];
-    }
 }
