@@ -1,20 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Palamarchuk\CatalogCategoriesImportExport\Model\Export;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\ImportExport\Model\Export\Entity\AbstractEntity;
-use Magento\Store\Model\Store;
+use Magento\Framework\Model\AbstractModel;
+use Magento\ImportExport\Model\Export\Entity\AbstractEav;
+use Magento\ImportExport\Model\Import;
 
-class Category extends AbstractEntity
+class Category extends AbstractEav
 {
+    const COLUMN_WEBSITE = '_website';
+
+    const COLUMN_STORE = '_store';
+
     /**
-     * @var \Psr\Log\LoggerInterface
+     * Attribute collection name
      */
-    protected $_logger;
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection::class;
 
     /**
      * Product collection
@@ -22,110 +23,77 @@ class Category extends AbstractEntity
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $_entityCollectionFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     */
-    protected $_attributeColFactory;
-
     /**
      * Product collection
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     protected $_entityCollection;
+    protected $_attributeCollection;
+    private $_logger;
 
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface                      $localeDate,
-        \Magento\Eav\Model\Config                                                 $config,
-        ResourceConnection                                                        $resource,
-        \Magento\Store\Model\StoreManagerInterface                                $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory           $categoryColFactory,
-        \Magento\Catalog\Model\ResourceModel\Category\Attribute\CollectionFactory $attributeColFactory,
-        \Psr\Log\LoggerInterface                                                  $logger,
-    )
-    {
-        parent::__construct($localeDate, $config, $resource, $storeManager);
-        $this->_entityCollectionFactory = $categoryColFactory;
-        $this->_attributeColFactory = $attributeColFactory;
+        \Magento\Framework\App\Config\ScopeConfigInterface                         $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface                                 $storeManager,
+        \Magento\ImportExport\Model\Export\Factory                                 $collectionFactory,
+        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface                       $localeDate,
+        \Magento\Eav\Model\Config                                                  $eavConfig,
+//        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory           $categoryColFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\Collection                   $collection,
+        \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection         $attributeCollection,
+        \Psr\Log\LoggerInterface                                                   $logger,
+//        \Magento\ImportExport\Model\Export\Adapter\Csv      $writer,
+        array                                                                      $data = []
+    ) {
+        parent::__construct(
+            $scopeConfig,
+            $storeManager,
+            $collectionFactory,
+            $resourceColFactory,
+            $localeDate,
+            $eavConfig,
+            $data
+        );
+//        $this->_entityCollectionFactory = $categoryColFactory;
+        $this->_attributeCollection = $attributeCollection;
+        $this->_entityCollection = $collection;
         $this->_logger = $logger;
+//        $this->_writer = $writer;
+
+        $this->_initAttributeValues()->_initAttributeTypes()->_initStores()->_initWebsites(true);
+
+//        $this->export();
     }
 
-    /**
-     * @throws NoSuchEntityException
-     */
-    protected function _getHeaderColumns()
-    {
-        if (isset($this->_getEntityCollection()->getData()[0])) {
-            return array_keys($this->_getEntityCollection()->getData()[0]);
-        }
-
-        throw new NoSuchEntityException("Catalog category entity is not found");
-    }
-
-    /**
-     * Get entity collection
-     *
-     * @param bool $resetCollection
-     * @return \Magento\Framework\Data\Collection\AbstractDb
-     */
-    protected function _getEntityCollection($resetCollection = false)
-    {
-        if ($resetCollection || empty($this->_entityCollection)) {
-            $this->_entityCollection = $this->_entityCollectionFactory->create();
-        }
-
-        return $this->_entityCollection;
-    }
-
-    /**
-     * Export process
-     *
-     * @return string
-     */
     public function export()
     {
-        //Execution time may be very long
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        set_time_limit(0);
         try {
+            $this->_prepareEntityCollection($this->_getEntityCollection());
             $writer = $this->getWriter();
-            $page = 0;
-            while (true) {
-                ++$page;
-                $entityCollection = $this->_getEntityCollection(true);
-                $entityCollection->setOrder('entity_id', 'asc');
-                $entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
-                $this->_prepareEntityCollection($entityCollection);
-                if ($entityCollection->count() == 0) {
-                    break;
-                }
-                $exportData = $this->_getEntityCollection()->toArray();
-                array_unshift($exportData, $this->_getHeaderColumns());
-                if ($page == 1) {
-                    $writer->setHeaderCols($this->_getHeaderColumns());
-                }
-                foreach ($exportData as $dataRow) {
-                    $writer->writeRow($dataRow);
-                }
-                if ($entityCollection->getCurPage() >= $entityCollection->getLastPageNumber()) {
-                    break;
-                }
-            }
+
+            // create export file
+            $writer->setHeaderCols($this->_getHeaderColumns());
+            $this->_exportCollectionByPages($this->_getEntityCollection());
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
+
         return $writer->getContents();
     }
 
-    /**
-     * Entity attributes collection getter.
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection
-     */
-    public function getAttributeCollection()
+    public function exportItem($item)
     {
-        return $this->_attributeColFactory->create();
+        try {
+            $item = $this->prepareItemToAddAttributeValuesToRow($item);
+            $row = $this->_addAttributeValuesToRow($item);
+//        $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
+//        $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
+
+            $this->getWriter()->writeRow($row);
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
     }
 
     public function getEntityTypeCode()
@@ -133,17 +101,49 @@ class Category extends AbstractEntity
         return "catalog_category";
     }
 
-    /**
-     * Set page and page size to collection
-     *
-     * @param int $page
-     * @param int $pageSize
-     * @return void
-     */
-    protected function paginateCollection($page, $pageSize)
+    protected function _getHeaderColumns()
     {
-        $this->_getEntityCollection()->setPage($page, $pageSize);
+        try {
+            return $this->_getExportAttributeCodes();
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
     }
 
+    protected function _getEntityCollection()
+    {
+//        if ($resetCollection || empty($this->_entityCollection)) {
+//            $this->_entityCollection = $this->_entityCollectionFactory->create();
+//        }
 
+        return $this->_entityCollection;
+    }
+
+//    public function getAttributeCollection()
+//    {
+//        return $this->_attributeCollection;
+//    }
+
+//    public function getWriter()
+//    {
+//        return $this->_writer;
+//    }
+
+    /**
+     * fix issues with null != "" in php8+ versions
+     * @param AbstractModel $item
+     * @return AbstractModel
+     */
+    protected function prepareItemToAddAttributeValuesToRow(\Magento\Framework\Model\AbstractModel $item)
+    {
+        $validAttributeCodes = $this->_getExportAttributeCodes();
+        // go through all valid attribute codes
+        foreach ($validAttributeCodes as $attributeCode) {
+            if ($item->getData($attributeCode)===null) {
+                $item->setData($attributeCode, '0');
+            }
+        }
+
+        return $item;
+    }
 }
