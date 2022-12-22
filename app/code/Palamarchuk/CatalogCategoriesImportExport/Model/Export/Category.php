@@ -140,7 +140,7 @@ class Category extends AbstractEav
         // go through all valid attribute codes
         foreach ($validAttributeCodes as $attributeCode) {
             if ($item->getData($attributeCode)===null) {
-                $item->setData($attributeCode, '0');
+                $item->setData($attributeCode, '');
             }
         }
 
