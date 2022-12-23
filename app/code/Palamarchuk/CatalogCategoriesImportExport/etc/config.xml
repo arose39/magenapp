@@ -4,7 +4,7 @@
     <default>
         <import>
             <format_v2>
-                <category_bunch_size>1</category_bunch_size>
+                <category_bunch_size>2</category_bunch_size>
             </format_v2>
         </import>
     </default>
