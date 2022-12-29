@@ -8,6 +8,7 @@ use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Customer\Model\Indexer\Processor;
 use Magento\Eav\Model\Config;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -27,15 +28,39 @@ class Category extends AbstractEav
     public const XML_PATH_BUNCH_SIZE = 'import/format_v2/category_bunch_size';
     public const ERROR_PATH_LEVEL_VALUE = 'pathDoesNotCorrespondLevel';
     public const ERROR_PATH_VALUE = 'wrongPathValue';
+    public const URL_KEY_VALUE_DOUBLED = 'urlKeyValueDoubled';
+    public const DATA_IS_REQUIRED = "dataIsRequiered";
     protected array $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
     protected $masterAttributeCode = 'name';
     protected CategoryResource $categoryResource;
+    protected $nessessaryColumns = [
+        'available_sort_by',
+        'custom_apply_to_products',
+        'custom_use_parent_settings',
+        'default_sort_by',
+        'description',
+        'display_mode',
+        'filter_price_range',
+        'include_in_menu',
+        'is_active',
+        'is_anchor',
+        'level',
+        'name',
+        'page_layout',
+        'path',
+        'url_key',
+        'url_path'
+    ];
+
     private CategoryListInterface $categoryList;
     private SearchCriteriaInterface $searchCriteria;
     private int $lastCategoryId;
     private CategoryRepositoryInterface $categoryRepository;
     private Collection $categoryCollection;
     private CategoryFactory $categoryFactory;
+    private Processor $indexerProcessor;
+    private StoreManagerInterface $storeManager;
+    private CollectionFactory $categoryCollectionFactory;
 
 
     public function __construct(
@@ -54,8 +79,11 @@ class Category extends AbstractEav
         CategoryFactory                    $categoryFactory,
         SearchCriteriaInterface            $searchCriteria,
         CategoryResource                   $categoryResource,
+        CollectionFactory                  $categoryCollectionFactory,
+        Processor                          $indexerProcessor,
         array                              $data = []
-    ) {
+    )
+    {
         parent::__construct(
             $string,
             $scopeConfig,
@@ -68,13 +96,16 @@ class Category extends AbstractEav
             $eavConfig,
             $data
         );
+        $this->storeManager = $storeManager;
         $this->categoryRepository = $categoryRepository;
         $this->categoryList = $categoryList;
         $this->categoryCollection = $categoryCollection;
         $this->categoryFactory = $categoryFactory;
         $this->searchCriteria = $searchCriteria;
+        $this->indexerProcessor = $indexerProcessor;
         $this->lastCategoryId = (int)$categoryCollection->getLastItem()->getId();
         $this->categoryResource = $categoryResource;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
 
         $this->addMessageTemplate(
             self::ERROR_PATH_LEVEL_VALUE,
@@ -84,6 +115,14 @@ class Category extends AbstractEav
             self::ERROR_PATH_VALUE,
             'Value for PATH attribute in row with category name \'%s\'  incorrect. Some Ids from path not found nor in file not in existing categories.
             Search was provided by level of nesting'
+        );
+        $this->addMessageTemplate(
+            self::URL_KEY_VALUE_DOUBLED,
+            'Value for URL_KEY attribute should be unique, should appear in uploaded file once. Non unique url keys: \'%s\'.'
+        );
+        $this->addMessageTemplate(
+            self::DATA_IS_REQUIRED,
+            'For correct import requiered field \'%s\'.'
         );
     }
 
@@ -96,16 +135,48 @@ class Category extends AbstractEav
 
     public function validateData()
     {
+
+//        $this->categoryCollectionFactory->create()->setStoreId(2)->addAttributeToSelect('*')->getItems();
+
+
         parent::validateData();
         if ($this->getErrorAggregator()->getErrorsCount()) {
             return $this->getErrorAggregator();
         }
+
+        if ($this->getBehavior() === Import::BEHAVIOR_DELETE) {
+            return $this->getErrorAggregator();
+        }
+
         $data = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             foreach ($bunch as $rowNumber => $rowData) {
                 $data[$rowNumber] = $rowData;
             }
         }
+
+        foreach ($this->nessessaryColumns as $columnName){
+            if(!in_array($columnName, $this->getSource()->getColNames())){
+                $this->addErrors(self::DATA_IS_REQUIRED, [$columnName]);
+            }
+        }
+
+
+
+        $dataUrlKeys = [];
+        foreach ($data as $rowData) {
+            $dataUrlKeys[] = $rowData['url_key'] ?? '';
+        }
+        $counts = array_count_values($dataUrlKeys);
+        unset($counts['']);
+        $repeatedUrlKeys = [];
+        foreach ($counts as $key => $item) {
+            if ($item > 1) {
+                $repeatedUrlKeys[] = $key;
+            }
+        }
+        $this->addErrors(self::URL_KEY_VALUE_DOUBLED, $repeatedUrlKeys);
+
 
         $newLeveledIds = [];
         foreach ($data as $rowNumber => $rowData) {
@@ -125,14 +196,16 @@ class Category extends AbstractEav
             $pathIsCorrectCounter = 0;
             foreach ($explodedPath as $level => $id) {
                 $findInNewLeveledIds = false;
-                foreach ($newLeveledIds[$level] as $idFromList) {
-                    if ($id === $idFromList) {
-                        $pathIsCorrectCounter++;
-                        $findInNewLeveledIds = true;
-                        break;
+                if (isset($newLeveledIds[$level])) {
+                    foreach ($newLeveledIds[$level] as $idFromList) {
+                        if ($id === $idFromList) {
+                            $pathIsCorrectCounter++;
+                            $findInNewLeveledIds = true;
+                            break;
+                        }
                     }
                 }
-                if (!$findInNewLeveledIds){
+                if (!$findInNewLeveledIds && isset($existingLeveledIds[$level])) {
                     foreach ($existingLeveledIds[$level] as $idFromList) {
                         if ($id === $idFromList) {
                             $pathIsCorrectCounter++;
@@ -141,11 +214,10 @@ class Category extends AbstractEav
                     }
                 }
             }
-            if ($pathIsCorrectCounter !== count($explodedPath)){
+            if ($pathIsCorrectCounter !== count($explodedPath)) {
                 $this->addErrors(self::ERROR_PATH_VALUE, [$rowData['name']]);
             }
         }
-
 
         return $this->getErrorAggregator();
     }
@@ -165,7 +237,8 @@ class Category extends AbstractEav
                 $this->addAndUpdateEntities();
                 break;
         }
-//        $this->indexerProcessor->markIndexerAsInvalid();
+        $this->indexerProcessor->markIndexerAsInvalid();
+
         return true;
     }
 
@@ -175,9 +248,107 @@ class Category extends AbstractEav
         $dividedEntities = $this->getListsOfUpdatedAndCreatedEntities();
         $entitiesToCreate = $dividedEntities['entities_to_create'];
         $entitiesToUpdate = $dividedEntities['entities_to_update'];
+
+
+        foreach ($entitiesToCreate as $entity) {
+            $entityArray = $entity->toArray();
+            $coorectArrayEntity = [
+                'entity_id' => $entityArray['entity_id'],
+                'attribute_set_id' => 3,
+                'parent_id' => $entityArray['parent_id'],
+                'path' => $entityArray['path'],
+                'position' => $entityArray['position'],
+                'level' => $entityArray['level'],
+
+            ];
+
+            $this->categoryResource->getConnection()->insertOnDuplicate('catalog_category_entity', $coorectArrayEntity);
+            $currentStoreId = (int)$this->storeManager->getStore()->getId();
+            //todo add store_id to export
+
+            $this->storeManager->setCurrentStore(0);
+            $this->categoryRepository->save($entity);
+
+            $this->storeManager->setCurrentStore($currentStoreId);
+        }
+        foreach ($entitiesToUpdate as $entity) {
+            $this->categoryRepository->save($entity);
+        }
+
+        return true;
+    }
+
+    protected function getListsOfUpdatedAndCreatedEntities()
+    {
+        $entitiesToCreate = [];
+        $entitiesToUpdate = [];
+
+        // todo make right collection
+        $entityCollection = $this->categoryList->getList($this->searchCriteria)->getItems();
+
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            foreach ($bunch as $rowNumber => $rowData) {
+                $updateFlag = false;
+                foreach ($entityCollection as $entity) {
+                    if (($rowData['name'] === 'Root Catalog') && ($rowData['level']== 0)) {
+                        $updateFlag = true;
+                        break;
+                    }
+                    if ($entity->getData('url_key') === $rowData['url_key']) {
+                        $entitiesToUpdate[] = $this->updateEntityData($entity, $rowData);
+                        $updateFlag = true;
+                        break;
+                    }
+                }
+                if (!$updateFlag) {
+                    /** @var \Magento\Catalog\Model\Category $newEntity */
+                    $newEntity = $this->categoryFactory->create();
+                    unset($rowData['children_count']);
+                    $newEntity->setData($rowData);
+                    $entitiesToCreate[] = $newEntity;
+                }
+            }
+        }
+        $this->setNewIdsAndUpdateHierarchy($entitiesToCreate, $entitiesToUpdate);
+
+        return ['entities_to_create' => $entitiesToCreate, 'entities_to_update' => $entitiesToUpdate];
+    }
+
+    private function updateEntityData($entity, $rowData)
+    {
+        $entityId = $entity->getData('entity_id');
+        $entityPath = $entity->getData('path');
+        // todo validate if exist in array such fields
+        $newPath = $rowData['path'];
+        $isActive = ($rowData['is_active'] === "Yes") ? true : false;
+        $includeInMenu = ($rowData['include_in_menu'] === "Yes") ? true : false;
+        $isAnchor = ($rowData['is_anchor'] === "Yes") ? true : false;
+        unset($rowData['is_active'], $rowData['include_in_menu'], $rowData['is_anchor']);
+        $entity->setData($rowData);
+        $entity->setId($entityId);
+        $entity->setIsActive($isActive);
+        $entity->setIncludeInMenu($includeInMenu);
+        $entity->setIsAnchor($isAnchor);
+        if ($entityPath !== $newPath) {
+            $entity->setPath($newPath);
+
+            $explodedPath = explode('/', $newPath ?? '');
+            if (is_array($explodedPath) && (count($explodedPath) > 2)) {
+                $newEntityParentId = (int)$explodedPath[($rowData['level'] - 1)];
+                $entity->setParentId($newEntityParentId);
+            } else {
+                //default category
+                $entity->setParentId(1);
+            }
+        }
+
+        return $entity;
+    }
+
+    private function setNewIdsAndUpdateHierarchy($entitiesToCreate, $entitiesToUpdate)
+    {
+        //changing objects in $allEntities array, we also canged objects in $entitiesToCreate, $entitiesToUpdate arrys, becouse objects is given by link
         $allEntities = array_merge($entitiesToCreate, $entitiesToUpdate);
-
-
         // Code below sets new IDs and updates the hierarchy
         /** @var \Magento\Catalog\Model\Category $newEntity */
         foreach ($entitiesToCreate as $newEntity) {
@@ -188,14 +359,13 @@ class Category extends AbstractEav
             $implodedPath = implode('/', $explodedPath);
             $newEntity->setData('path', $implodedPath);
             //set parent Id to newEntity if parent exists
-            if (count($explodedPath) > 1) {
+            if (count($explodedPath) > 2) {
                 $newEntityParentId = (int)$explodedPath[($newEntity->getData('level') - 1)];
                 $newEntity->setParentId($newEntityParentId);
             } else {
-                //root category
-                $newEntity->setParentId(0);
+                //default category
+                $newEntity->setParentId(1);
             }
-
             foreach ($allEntities as $changePathEntity) {
                 if ($changePathEntity->getData('path') === $implodedPath) {
                     continue;
@@ -216,96 +386,28 @@ class Category extends AbstractEav
                 }
             }
         }
-
-        foreach ($entitiesToCreate as $entity) {
-            $entityArray = $entity->toArray();
-            $coorectArrayEntity = [
-                'entity_id' => $entityArray['entity_id'],
-                'attribute_set_id' => 3,
-                'parent_id' => $entityArray['parent_id'],
-                'path' => $entityArray['path'],
-                'position' => $entityArray['position'],
-                'level' => $entityArray['level']
-
-            ];
-            $this->categoryResource->getConnection()->insertOnDuplicate('catalog_category_entity', $coorectArrayEntity);
-
-            $this->categoryRepository->save($entity);
-        }
-        foreach ($entitiesToUpdate as $entity) {
-            $this->categoryRepository->save($entity);
-        }
-
-        return true;
     }
 
-    protected function getListsOfUpdatedAndCreatedEntities()
+    private function deleteEntities()
     {
-        $entitiesToCreate = [];
-        $entitiesToUpdate = [];
+        // todo make right collection
         $entityCollection = $this->categoryList->getList($this->searchCriteria)->getItems();
+
+
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            foreach ($bunch as $rowNumber => $rowData) {
-                $updateFlag = false;
+            foreach ($bunch as $rowData) {
                 foreach ($entityCollection as $entity) {
-                    $entityName = $entity->getData('name');
-                    $entityId = $entity->getData('entity_id');
-                    $entityPath = $entity->getData('path');
-
-//                    if (!$this->validateRow($rowData, $rowNumber)) {
-//                        continue;
-//                    }
-//                    if ($this->getErrorAggregator()->hasToBeTerminated()) {
-//                        $this->getErrorAggregator()->addRowToSkip($rowNumber);
-//                        continue;
-//                    }
-
-                    if ($entityName === $rowData['name']) {
-                        // todo validate if exist in array such fields
-                        $newPath = $rowData['path'];
-                        $isActive = ($rowData['is_active'] === "Yes") ? true : false;
-                        $includeInMenu = ($rowData['include_in_menu'] === "Yes") ? true : false;
-                        $isAnchor = ($rowData['is_anchor'] === "Yes") ? true : false;
-                        unset($rowData['is_active'], $rowData['include_in_menu'], $rowData['is_anchor']);
-                        $entity->setData($rowData);
-                        $entity->setId($entityId);
-                        $entity->setIsActive($isActive);
-                        $entity->setIncludeInMenu($includeInMenu);
-                        $entity->setIsAnchor($isAnchor);
-                        if ($entityPath !== $newPath) {
-                            $entity->setPath($newPath);
-
-                            $explodedPath = explode('/', $newPath ?? '');
-                            if (is_array($explodedPath) && (count($explodedPath) > 1)) {
-                                $newEntityParentId = (int)$explodedPath[($rowData['level'] - 1)];
-                                $entity->setParentId($newEntityParentId);
-                            } else {
-                                //root category
-                                $entity->setParentId(0);
-                            }
+                    if ($entity->getUrlKey() === $rowData['url_key']) {
+                        if ($rowData['name'] === 'Default Category' || $rowData['name'] === 'Root Catalog') {
+                            break;
                         }
-                        $entitiesToUpdate[] = $entity;
-                        $updateFlag = true;
-                        break;
+
+                        $this->categoryRepository->delete($entity);
                     }
-                }
-                if (!$updateFlag) {
-                    /** @var \Magento\Catalog\Model\Category $newEntity */
-                    $newEntity = $this->categoryFactory->create();
-                    //todo make validation on fiels wich are being set
-                    unset($rowData['children_count']);
-                    $newEntity->setData($rowData);
-                    $entitiesToCreate[] = $newEntity;
                 }
             }
         }
 
-        return ['entities_to_create' => $entitiesToCreate, 'entities_to_update' => $entitiesToUpdate];
-    }
-
-
-    private function deleteEntities()
-    {
         return true;
     }
 }
