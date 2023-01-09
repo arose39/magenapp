@@ -2,16 +2,17 @@
 
 namespace Palamarchuk\CatalogCategoriesImportExport\Model\Export;
 
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\ImportExport\Model\Export\Entity\AbstractEav;
 use Magento\ImportExport\Model\Import;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 class Category extends AbstractEav
 {
     const COLUMN_WEBSITE = '_website';
-
     const COLUMN_STORE = '_store';
-
     /**
      * Attribute collection name
      */
@@ -31,6 +32,8 @@ class Category extends AbstractEav
     protected $_entityCollection;
     protected $_attributeCollection;
     private $_logger;
+    private CollectionFactory $categoryCollectionFactory;
+    private RequestInterface $request;
 
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface                         $scopeConfig,
@@ -43,9 +46,12 @@ class Category extends AbstractEav
         \Magento\Catalog\Model\ResourceModel\Category\Collection                   $collection,
         \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection         $attributeCollection,
         \Psr\Log\LoggerInterface                                                   $logger,
+        CollectionFactory                  $categoryCollectionFactory,
+        RequestInterface    $request,
 //        \Magento\ImportExport\Model\Export\Adapter\Csv      $writer,
         array                                                                      $data = []
     ) {
+        $this->request = $request;
         parent::__construct(
             $scopeConfig,
             $storeManager,
@@ -58,10 +64,13 @@ class Category extends AbstractEav
 //        $this->_entityCollectionFactory = $categoryColFactory;
         $this->_attributeCollection = $attributeCollection;
         $this->_entityCollection = $collection;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+
         $this->_logger = $logger;
 //        $this->_writer = $writer;
-
+        $storeId = $this->request->getParams();
         $this->_initAttributeValues()->_initAttributeTypes()->_initStores()->_initWebsites(true);
+
 
 //        $this->export();
     }
@@ -116,7 +125,10 @@ class Category extends AbstractEav
 //            $this->_entityCollection = $this->_entityCollectionFactory->create();
 //        }
 
-        return $this->_entityCollection;
+        $storeId = $this->request->getParam('store_id');
+        $collection = $this->getEntityCollectionForDistinctStoreId($storeId);
+
+        return $collection;
     }
 
 //    public function getAttributeCollection()
@@ -145,5 +157,18 @@ class Category extends AbstractEav
         }
 
         return $item;
+    }
+
+    private function getEntityCollectionForDistinctStoreId($storeId)
+    {
+        /** @var Collection $collection */
+        $collection = $this->categoryCollectionFactory->create()->setStoreId($storeId)->addAttributeToSelect('*');
+        foreach ($collection as $entity) {
+            if (!$entity->getName()) {
+                $collection->removeItemByKey($entity->getId());
+            }
+        }
+
+        return $collection;
     }
 }
