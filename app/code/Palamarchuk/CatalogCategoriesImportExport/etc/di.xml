@@ -4,4 +4,8 @@
         <plugin name="Palamarchuk\CatalogCategoriesImportExport\Plugin\StoreIdImportFormFieldPlugin"
                 type="Palamarchuk\CatalogCategoriesImportExport\Plugin\StoreIdImportFormFieldPlugin" sortOrder="1"/>
     </type>
+    <type name="Magento\ImportExport\Block\Adminhtml\Export\Edit\Form">
+        <plugin name="Palamarchuk\CatalogCategoriesImportExport\Plugin\StoreIdExportFormFieldPlugin"
+                type="Palamarchuk\CatalogCategoriesImportExport\Plugin\StoreIdExportFormFieldPlugin" sortOrder="1"/>
+    </type>
 </config>

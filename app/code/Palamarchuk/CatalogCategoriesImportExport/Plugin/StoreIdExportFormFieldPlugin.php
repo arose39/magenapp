@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Palamarchuk\CatalogCategoriesImportExport\Plugin;
 
-use Magento\ImportExport\Block\Adminhtml\Import\Edit\Form;
+use Magento\ImportExport\Block\Adminhtml\Export\Edit\Form;
 use Palamarchuk\CatalogCategoriesImportExport\Model\Config\Source\Stores;
 
-class StoreIdImportFormFieldPlugin
+class StoreIdExportFormFieldPlugin
 {
     public function __construct(
         private Stores $stores
