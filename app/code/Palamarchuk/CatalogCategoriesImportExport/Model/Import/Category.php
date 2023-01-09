@@ -12,6 +12,7 @@ use Magento\Customer\Model\Indexer\Processor;
 use Magento\Eav\Model\Config;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\ResourceModel\PredefinedId;
 use Magento\Framework\Stdlib\StringUtils;
@@ -61,6 +62,7 @@ class Category extends AbstractEav
     private Processor $indexerProcessor;
     private StoreManagerInterface $storeManager;
     private CollectionFactory $categoryCollectionFactory;
+    private RequestInterface $request;
 
 
     public function __construct(
@@ -79,11 +81,11 @@ class Category extends AbstractEav
         CategoryFactory                    $categoryFactory,
         SearchCriteriaInterface            $searchCriteria,
         CategoryResource                   $categoryResource,
+        RequestInterface    $request,
         CollectionFactory                  $categoryCollectionFactory,
         Processor                          $indexerProcessor,
         array                              $data = []
-    )
-    {
+    ) {
         parent::__construct(
             $string,
             $scopeConfig,
@@ -102,6 +104,7 @@ class Category extends AbstractEav
         $this->categoryCollection = $categoryCollection;
         $this->categoryFactory = $categoryFactory;
         $this->searchCriteria = $searchCriteria;
+        $this->request = $request;
         $this->indexerProcessor = $indexerProcessor;
         $this->lastCategoryId = (int)$categoryCollection->getLastItem()->getId();
         $this->categoryResource = $categoryResource;
@@ -135,7 +138,10 @@ class Category extends AbstractEav
 
     public function validateData()
     {
-
+      $ss =   $this->storeManager->getStores();
+//        $sss = $this->request->getParams();
+        $s = $this->getEntityCollectionForDistinctStoreId(2);
+//        $ss = $this->getEntityCollectionForDistinctStoreId(0);
 //        $this->categoryCollectionFactory->create()->setStoreId(2)->addAttributeToSelect('*')->getItems();
 
 
@@ -155,12 +161,11 @@ class Category extends AbstractEav
             }
         }
 
-        foreach ($this->nessessaryColumns as $columnName){
-            if(!in_array($columnName, $this->getSource()->getColNames())){
+        foreach ($this->nessessaryColumns as $columnName) {
+            if (!in_array($columnName, $this->getSource()->getColNames())) {
                 $this->addErrors(self::DATA_IS_REQUIRED, [$columnName]);
             }
         }
-
 
 
         $dataUrlKeys = [];
@@ -259,20 +264,26 @@ class Category extends AbstractEav
                 'path' => $entityArray['path'],
                 'position' => $entityArray['position'],
                 'level' => $entityArray['level'],
-
             ];
 
             $this->categoryResource->getConnection()->insertOnDuplicate('catalog_category_entity', $coorectArrayEntity);
             $currentStoreId = (int)$this->storeManager->getStore()->getId();
-            //todo add store_id to export
 
-            $this->storeManager->setCurrentStore(0);
+            if ($entity->getLevel() == 1) {
+                $this->storeManager->setCurrentStore(0);
+                $this->categoryRepository->save($entity);
+                $this->storeManager->setCurrentStore($currentStoreId);
+            }
+
+            $this->storeManager->setCurrentStore(3);
             $this->categoryRepository->save($entity);
 
             $this->storeManager->setCurrentStore($currentStoreId);
         }
         foreach ($entitiesToUpdate as $entity) {
+            $this->storeManager->setCurrentStore(0);
             $this->categoryRepository->save($entity);
+            $this->storeManager->setCurrentStore($currentStoreId);
         }
 
         return true;
@@ -290,7 +301,7 @@ class Category extends AbstractEav
             foreach ($bunch as $rowNumber => $rowData) {
                 $updateFlag = false;
                 foreach ($entityCollection as $entity) {
-                    if (($rowData['name'] === 'Root Catalog') && ($rowData['level']== 0)) {
+                    if (($rowData['name'] === 'Root Catalog') && ($rowData['level'] == 0)) {
                         $updateFlag = true;
                         break;
                     }
@@ -318,7 +329,6 @@ class Category extends AbstractEav
     {
         $entityId = $entity->getData('entity_id');
         $entityPath = $entity->getData('path');
-        // todo validate if exist in array such fields
         $newPath = $rowData['path'];
         $isActive = ($rowData['is_active'] === "Yes") ? true : false;
         $includeInMenu = ($rowData['include_in_menu'] === "Yes") ? true : false;
@@ -409,5 +419,18 @@ class Category extends AbstractEav
         }
 
         return true;
+    }
+
+    private function getEntityCollectionForDistinctStoreId($storeId)
+    {
+        /** @var Collection $collection */
+        $collection = $this->categoryCollectionFactory->create()->setStoreId($storeId)->addAttributeToSelect('*');
+        foreach ($collection as $entity) {
+            if (!$entity->getName()) {
+                $collection->removeItemByKey($entity->getId());
+            }
+        }
+
+        return $collection;
     }
 }

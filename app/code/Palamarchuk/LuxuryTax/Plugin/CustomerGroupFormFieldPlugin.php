@@ -6,12 +6,12 @@ namespace Palamarchuk\LuxuryTax\Plugin;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Block\Adminhtml\Group\Edit\Form;
-use Palamarchuk\LuxuryTax\Model\Config\Source\LuxuryTaxes;
+use Palamarchuk\LuxuryTax\Model\Config\Source\Stores;
 
 class CustomerGroupFormFieldPlugin
 {
     public function __construct(
-        private LuxuryTaxes              $luxuryTaxes,
+        private Stores                   $luxuryTaxes,
         private GroupRepositoryInterface $groupRepository
     )
     {
