@@ -84,11 +84,12 @@ class Category extends AbstractEav
         Collection                         $categoryCollection,
         CategoryFactory                    $categoryFactory,
         CategoryResource                   $categoryResource,
-        RequestInterface    $request,
+        RequestInterface                   $request,
         CollectionFactory                  $categoryCollectionFactory,
         Processor                          $indexerProcessor,
         array                              $data = []
-    ) {
+    )
+    {
         parent::__construct(
             $string,
             $scopeConfig,

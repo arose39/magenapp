@@ -108,6 +108,10 @@ class LuxuryTaxTotal extends AbstractTotal
             $customerGroupId = $quote->getCustomerGroupId();
         }
         $luxuryTaxId = (int)$this->groupRepository->getById($customerGroupId)->getExtensionAttributes()->getLuxuryTaxId();
+        if($luxuryTaxId === 0){
+            return 0;
+        }
+
         //getLuxuryTaxAmount -> getLuxuryTaxRate . Wrong naming in luxuryTaxEntity
         $luxuryTaxPercent = $this->luxuryTaxRepository->get($luxuryTaxId)->getLuxuryTaxAmount() / 100;
 

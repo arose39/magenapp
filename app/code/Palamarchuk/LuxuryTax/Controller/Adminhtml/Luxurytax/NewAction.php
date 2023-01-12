@@ -16,7 +16,7 @@ class NewAction extends Action
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Palamarchuk_LuxuryTax::module');
-        $resultPage->getConfig()->getTitle()->prepend('Stores');
+        $resultPage->getConfig()->getTitle()->prepend('LuxuryTaxes');
 
         return $resultPage;
     }
