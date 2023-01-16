@@ -10,8 +10,8 @@ define(
         'use strict';
         rendererList.push(
             {
-                type: 'testpayment',
-                component: 'Palamarchuk_ElogicCreditCard/js/view/payment/method-renderer/testpayment'
+                type: 'cc_payment',
+                component: 'Palamarchuk_ElogicCreditCard/js/view/payment/method-renderer/cc_payment'
             }
         );
         return Component.extend({});

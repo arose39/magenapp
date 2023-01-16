@@ -2,14 +2,26 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <payment>
-            <testpayment>
-                <payment_action>authorize</payment_action><!-- You can use another methor like capture  -->
-                <model>Palamarchuk\ElogicCreditCard\Model\PaymentMethod</model>
-                <active>1</active>
-                <title>Test Payment</title>
-                <order_status>pending_payment</order_status><!-- set default order status-->
-            </testpayment>
-        </payment>
+        <cc_payment>
+
+            <payment_action>authorize</payment_action><!-- You can use another methor like capture  -->
+            <model>Palamarchuk\ElogicCreditCard\Model\PaymentMethod</model>
+            <active>1</active>
+            <title>Test Payment</title>
+            <order_status>pending_payment</order_status><!-- set default order status-->
+            <!--                <title>LiqPay</title>-->
+            <!--                <active>1</active>-->
+            <payment_action>authorize_capture</payment_action>
+            <allowed_currencies>USD,UAH,RUB,EUR</allowed_currencies>
+            <!--                <model>PronkoLiqPayAdapter</model>-->
+            <connection_type>built_in_form</connection_type>
+            <can_use_checkout>1</can_use_checkout>
+            <is_gateway>1</is_gateway>
+            <can_authorize>1</can_authorize>
+            <can_capture>1</can_capture>
+            <can_refund>1</can_refund>
+            <debug>1</debug>
+
+        </cc_payment>
     </default>
 </config>
