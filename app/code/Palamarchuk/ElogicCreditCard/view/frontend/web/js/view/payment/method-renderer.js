@@ -1,19 +1,25 @@
 define(
     [
         'uiComponent',
-        'Magento_Checkout/js/model/payment/renderer-list'
+        'Magento_Checkout/js/model/payment/renderer-list',
+        'Palamarchuk_ElogicCreditCard/js/model/config'
     ],
-    function (
-        Component,
-        rendererList
-    ) {
+    function (Component, rendererList, renderComponentType) {
         'use strict';
-        rendererList.push(
-            {
-                type: 'cc_payment',
-                component: 'Palamarchuk_ElogicCreditCard/js/view/payment/method-renderer/cc_payment'
-            }
-        );
-        return Component.extend({});
+
+        return Component.extend({
+            /**
+             *  @returns this
+             */
+            initialize: function () {
+                this._super();
+
+                rendererList.push(
+                    renderComponentType.getComponent(this.connection_types)
+                );
+
+                return this;
+            },
+        });
     }
 );

@@ -13,7 +13,8 @@
                 <!--                <active>1</active>-->
                 <payment_action>authorize_capture</payment_action>
                 <allowed_currencies>USD,UAH,RUB,EUR</allowed_currencies>
-                                            <model>ElogicCreditCardAdapter</model>
+                <cctypes>VI,MC</cctypes>
+                <model>ElogicCreditCardAdapter</model>
                 <connection_type>built_in_form</connection_type>
                 <can_use_checkout>1</can_use_checkout>
                 <is_gateway>1</is_gateway>
