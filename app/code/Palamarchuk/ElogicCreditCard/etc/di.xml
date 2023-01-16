@@ -38,7 +38,7 @@
                 <item name="general" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\GeneralBuilder</item>
                 <item name="description" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\DescriptionBuilder</item>
                 <item name="order" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\OrderBuilder</item>
-                <item name="cardPayment" xsi:type="string">Palamarchuk\CreditCardCardGateway\Gateway\Request\Builder\CardPaymentBuilder</item>
+                <item name="cardPayment" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\CardPaymentBuilder</item>
                 <item name="paymentAction" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\PaymentActionBuilder</item>
             </argument>
         </arguments>
@@ -93,7 +93,7 @@
     <!-- CreditCard Payment Adapter Virtual Type Configuration -->
     <virtualType name="ElogicCreditCardAdapter" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="const">Palamarchuk\CreditCardApi\Api\Data\PaymentMethodCodeInterface::CODE</argument>
+            <argument name="code" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
             <argument name="infoBlockType" xsi:type="string">ElogicCreditCardConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">ElogicCreditCardValueHandlerPool</argument>
@@ -106,7 +106,7 @@
     <virtualType name="ElogicCreditCardConfigurableInfo" type="Magento\Payment\Block\ConfigurableInfo">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="methodCode" xsi:type="const">Palamarchuk\CreditCardApi\Api\Data\PaymentMethodCodeInterface::CODE</item>
+                <item name="methodCode" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE</item>
             </argument>
         </arguments>
     </virtualType>
@@ -146,7 +146,7 @@
     <!-- CreditCard Gateway Config -->
     <virtualType name="Palamarchuk\ElogicCreditCard\Gateway\Config\Config" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Palamarchuk\CreditCardApi\Api\Data\PaymentMethodCodeInterface::CODE</argument>
+            <argument name="methodCode" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE</argument>
         </arguments>
     </virtualType>
 

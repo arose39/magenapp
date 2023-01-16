@@ -12,6 +12,7 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Palamarchuk_ElogicCreditCard/payment/cc_payment',
+                code: 'cc_payment',
                 creditCardType: '',
                 creditCardExpYear: '',
                 creditCardExpMonth: '',

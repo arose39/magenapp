@@ -12,7 +12,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <form class="form" id="pay" action="#" name="pay" method="post" >
+        <form class="form" action="#" method="post" data-bind="attr: {id: getCode() + '_payment-form'}">
             <!-- ko template: 'Palamarchuk_ElogicCreditCard/payment/cc-payment-form' --><!-- /ko -->
         </form>
         <div class="actions-toolbar">
