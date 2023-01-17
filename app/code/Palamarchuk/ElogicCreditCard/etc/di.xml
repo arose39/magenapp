@@ -4,11 +4,9 @@
     <virtualType name="ElogicCreditCardCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-<!--                <item name="authorize" xsi:type="string">ElogicCreditCardAuthCommand</item>-->
-                <item name="authorize" xsi:type="string">ElogicCreditCardCaptureCommand</item>
+                <item name="authorize" xsi:type="string">ElogicCreditCardAuthCommand</item>
                 <item name="capture" xsi:type="string">ElogicCreditCardCaptureCommand</item>
-<!--                <item name="refund" xsi:type="string">ElogicCreditCardRefundCommand</item>-->
-                <item name="refund" xsi:type="string">ElogicCreditCardCaptureCommand</item>
+                <item name="refund" xsi:type="string">ElogicCreditCardRefundCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -17,7 +15,9 @@
     <virtualType name="ElogicCreditCardCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">ElogicCreditCardRequestCaptureBuilderComposite</argument>
-            <argument name="transferFactory" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Http\TransferFactory</argument>
+            <argument name="transferFactory" xsi:type="object">
+                Palamarchuk\ElogicCreditCard\Gateway\Http\TransferFactory
+            </argument>
             <argument name="client" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Http\Client</argument>
             <argument name="handler" xsi:type="object">ElogicCreditCardCaptureHandler</argument>
             <argument name="validator" xsi:type="object">ElogicCreditCardResponseValidatorPool</argument>
@@ -25,7 +25,8 @@
     </virtualType>
 
     <!-- CreditCard Request Capture Builder -->
-    <virtualType name="ElogicCreditCardRequestCaptureBuilderComposite" type="Palamarchuk\ElogicCreditCard\Gateway\Request\RequestBuilder">
+    <virtualType name="ElogicCreditCardRequestCaptureBuilderComposite"
+                 type="Palamarchuk\ElogicCreditCard\Gateway\Request\RequestBuilder">
         <arguments>
             <argument name="builder" xsi:type="object">ElogicCreditCardCaptureBuilderComposite</argument>
         </arguments>
@@ -35,11 +36,20 @@
     <virtualType name="ElogicCreditCardCaptureBuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="general" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\GeneralBuilder</item>
-                <item name="description" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\DescriptionBuilder</item>
-                <item name="order" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\OrderBuilder</item>
-                <item name="cardPayment" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\CardPaymentBuilder</item>
-                <item name="paymentAction" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\PaymentActionBuilder</item>
+                <item name="general" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\GeneralBuilder
+                </item>
+                <item name="description" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\DescriptionBuilder
+                </item>
+                <item name="order" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\OrderBuilder
+                </item>
+                <item name="cardPayment" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\CardPaymentBuilder
+                </item>
+                <item name="paymentAction" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\PaymentActionBuilder
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -48,8 +58,11 @@
     <virtualType name="ElogicCreditCardCaptureHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="payment" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Response\PaymentHandler</item>
-                <item name="transaction" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Response\TransactionHandler</item>
+                <item name="payment" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Response\PaymentHandler
+                </item>
+                <item name="transaction" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Response\TransactionHandler
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -58,7 +71,9 @@
     <virtualType name="ElogicCreditCardAuthCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">ElogicCreditCardRequestAuthBuilderComposite</argument>
-            <argument name="transferFactory" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Http\TransferFactory</argument>
+            <argument name="transferFactory" xsi:type="object">
+                Palamarchuk\ElogicCreditCard\Gateway\Http\TransferFactory
+            </argument>
             <argument name="client" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Http\Client</argument>
             <argument name="handler" xsi:type="object">ElogicCreditCardAuthHandler</argument>
             <argument name="validator" xsi:type="object">ElogicCreditCardResponseValidatorPool</argument>
@@ -69,14 +84,18 @@
     <virtualType name="ElogicCreditCardAuthHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="payment" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Response\PaymentHandler</item>
-                <item name="transaction" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Response\TransactionHandler</item>
+                <item name="payment" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Response\PaymentHandler
+                </item>
+                <item name="transaction" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Response\TransactionHandler
+                </item>
             </argument>
         </arguments>
     </virtualType>
 
     <!-- CreditCard Request Auth Builder -->
-    <virtualType name="ElogicCreditCardRequestAuthBuilderComposite" type="Palamarchuk\ElogicCreditCard\Gateway\Request\RequestBuilder">
+    <virtualType name="ElogicCreditCardRequestAuthBuilderComposite"
+                 type="Palamarchuk\ElogicCreditCard\Gateway\Request\RequestBuilder">
         <arguments>
             <argument name="builder" xsi:type="object">ElogicCreditCardAuthBuilderComposite</argument>
         </arguments>
@@ -86,11 +105,20 @@
     <virtualType name="ElogicCreditCardAuthBuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="general" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\GeneralBuilder</item>
-                <item name="description" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\DescriptionBuilder</item>
-                <item name="order" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\OrderBuilder</item>
-                <item name="cardPayment" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\CardPaymentBuilder</item>
-                <item name="paymentAction" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\PaymentActionBuilder</item>
+                <item name="general" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\GeneralBuilder
+                </item>
+                <item name="description" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\DescriptionBuilder
+                </item>
+                <item name="order" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\OrderBuilder
+                </item>
+                <item name="cardPayment" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\CardPaymentBuilder
+                </item>
+                <item name="paymentAction" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\PaymentActionBuilder
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -99,7 +127,9 @@
     <virtualType name="ElogicCreditCardRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">ElogicCreditCardRequestRefundBuilderComposite</argument>
-            <argument name="transferFactory" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Http\TransferFactory</argument>
+            <argument name="transferFactory" xsi:type="object">
+                Palamarchuk\ElogicCreditCard\Gateway\Http\TransferFactory
+            </argument>
             <argument name="client" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Http\Client</argument>
             <argument name="handler" xsi:type="object">ElogicCreditCardRefundHandler</argument>
             <argument name="validator" xsi:type="object">ElogicCreditCardRefundResponseValidatorPool</argument>
@@ -107,7 +137,8 @@
     </virtualType>
 
     <!-- CreditCard Request Refund Builder -->
-    <virtualType name="ElogicCreditCardRequestRefundBuilderComposite" type="Palamarchuk\ElogicCreditCard\Gateway\Request\RequestBuilder">
+    <virtualType name="ElogicCreditCardRequestRefundBuilderComposite"
+                 type="Palamarchuk\ElogicCreditCard\Gateway\Request\RequestBuilder">
         <arguments>
             <argument name="builder" xsi:type="object">ElogicCreditCardRefundBuilderComposite</argument>
         </arguments>
@@ -117,9 +148,15 @@
     <virtualType name="ElogicCreditCardRefundBuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="general" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\GeneralBuilder</item>
-                <item name="action" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\RefundActionBuilder</item>
-                <item name="order" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\RefundOrderBuilder</item>
+                <item name="general" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\GeneralBuilder
+                </item>
+                <item name="action" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\RefundActionBuilder
+                </item>
+                <item name="order" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Request\Builder\RefundOrderBuilder
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -134,18 +171,24 @@
     </virtualType>
 
     <!-- CreditCard Payment Refund Validator Pool-->
-    <virtualType name="ElogicCreditCardRefundResponseValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
+    <virtualType name="ElogicCreditCardRefundResponseValidatorPool"
+                 type="Magento\Payment\Gateway\Validator\ValidatorComposite">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="refund" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Validator\RefundResponseValidator</item>
+                <item name="refund" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Validator\RefundResponseValidator
+                </item>
             </argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="ElogicCreditCardResponseValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
+    <virtualType name="ElogicCreditCardResponseValidatorPool"
+                 type="Magento\Payment\Gateway\Validator\ValidatorComposite">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="general" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Validator\GeneralResponseValidator</item>
+                <item name="general" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Validator\GeneralResponseValidator
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -153,7 +196,8 @@
     <type name="Palamarchuk\ElogicCreditCard\Gateway\Config">
         <arguments>
             <argument name="config" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Config\Config</argument>
-            <argument name="gatewayUrl" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Sdk\ApiUrlInterface::API_URL</argument>
+            <argument name="gatewayUrl" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Sdk\ApiUrlInterface::API_URL
+            </argument>
         </arguments>
     </type>
 
@@ -176,7 +220,9 @@
     <!-- CreditCard Payment Adapter Virtual Type Configuration -->
     <virtualType name="ElogicCreditCardAdapter" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE</argument>
+            <argument name="code" xsi:type="const">
+                Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE
+            </argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
             <argument name="infoBlockType" xsi:type="string">ElogicCreditCardConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">ElogicCreditCardValueHandlerPool</argument>
@@ -189,7 +235,9 @@
     <virtualType name="ElogicCreditCardConfigurableInfo" type="Magento\Payment\Block\ConfigurableInfo">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="methodCode" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE</item>
+                <item name="methodCode" xsi:type="const">
+                    Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -204,7 +252,9 @@
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="country" xsi:type="string">ElogicCreditCardCountryValidator</item>
-                <item name="currency" xsi:type="string">Palamarchuk\ElogicCreditCard\Gateway\Validator\CurrencyValidator</item>
+                <item name="currency" xsi:type="string">
+                    Palamarchuk\ElogicCreditCard\Gateway\Validator\CurrencyValidator
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -222,14 +272,17 @@
     <!-- CreditCard Value Handler Configuration -->
     <virtualType name="ElogicCreditCardConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Config\Config</argument>
+            <argument name="configInterface" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Config\Config
+            </argument>
         </arguments>
     </virtualType>
 
     <!-- CreditCard Gateway Config -->
     <virtualType name="Palamarchuk\ElogicCreditCard\Gateway\Config\Config" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE</argument>
+            <argument name="methodCode" xsi:type="const">
+                Palamarchuk\ElogicCreditCard\Api\Data\PaymentMethodCodeInterface::CODE
+            </argument>
         </arguments>
     </virtualType>
 
@@ -243,7 +296,8 @@
     <type name="Palamarchuk\ElogicCreditCard\Gateway\Http\Client">
         <arguments>
             <argument name="logger" xsi:type="object">ElogicCreditCardLogger</argument>
-            <argument name="converter" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Converter\JsonToArray</argument>
+            <argument name="converter" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Converter\JsonToArray
+            </argument>
         </arguments>
     </type>
 
@@ -257,7 +311,8 @@
     <type name="Palamarchuk\ElogicCreditCard\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="logger" xsi:type="object">ElogicCreditCardLogger</argument>
-            <argument name="converter" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Converter\ArrayToEncoded</argument>
+            <argument name="converter" xsi:type="object">Palamarchuk\ElogicCreditCard\Gateway\Converter\ArrayToEncoded
+            </argument>
         </arguments>
     </type>
 
