@@ -32,7 +32,6 @@ class TransactionHandler implements HandlerInterface
             $rawDetails[$key] = $value;
         }
 
-        //todo rawDetailsInfo array should be string
         $payment->setTransactionAdditionalInfo('raw_details_info', $rawDetails);
     }
 }

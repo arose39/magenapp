@@ -42,7 +42,7 @@ class RefundOrderBuilder implements BuilderInterface
         $order = $buildSubject['payment']->getOrder();
 
         return [
-            RequestFields::AMOUNT => $buildSubject['amount'],
+            RequestFields::AMOUNT => $buildSubject['payment']->getPayment()->getAmountPaid(),
             RequestFields::ORDER_ID => $this->orderIdProvider->get($order),
         ];
     }
