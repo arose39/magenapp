@@ -26,15 +26,16 @@ class Index implements HttpGetActionInterface
 
 
         $urlCheckoutLiqPay = "https://www.liqpay.ua/api/3/checkout";
+        $order = $this->checkoutSession->getLastRealOrder();
         $data = array(
             'version' => '3',
             'public_key' => $publicKey,
             'action' => 'pay',
-            'amount' => '10',
-            'phone'=> "380633599878",
-            'currency' => 'USD',
-            'description' => 'description redirect for Magento 2',
-            'order_id' => '000000013a',
+            'amount' => $order->getGrandTotal(),
+            'phone'=> $order->getBillingAddress()->getTelephone(),
+            'currency' => $order->getOrderCurrency()->getCurrencyCode(),
+            'description' => 'Order ' . $order->getId() . ' in magenapp',
+            'order_id' => $order->getId(),
             "result_url"=>"https://magenapp.dev.com/redirect_payment/redirect/responsehandler",
             "server_url"=>"https://magenapp.requestcatcher.com/");
 
@@ -50,7 +51,7 @@ class Index implements HttpGetActionInterface
 
         $readyUrl = $urlCheckoutLiqPay . '?' . $uri;
 
-//        $order = $this->checkoutSession->getLastRealOrder()->getData();
+
         $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $redirect->setUrl($readyUrl);
 

@@ -4,12 +4,15 @@
 <default>
     <payment>
         <elogic_redirect_payment>
-            <payment_action>capture</payment_action><!-- You can use another methor like capture  -->
+            <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
             <model>Palamarchuk\ElogicRedirectPayment\Model\RedirectPaymentMethod</model>
             <active>1</active>
             <title>Elogic Redirect Payment</title>
             <can_use_checkout>1</can_use_checkout>
-            <order_status>pending_payment</order_status><!-- set default order status-->
+            <order_status>pending</order_status><!-- set default order status-->
+            <can_authorize>1</can_authorize>
+            <can_capture>1</can_capture>
+            <can_refund>1</can_refund>
         </elogic_redirect_payment>
     </payment>
 </default>
