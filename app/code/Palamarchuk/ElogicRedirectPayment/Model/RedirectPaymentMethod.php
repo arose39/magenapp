@@ -15,27 +15,20 @@ class RedirectPaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected $_code = 'elogic_redirect_payment';
     protected $_canRefund = true;
-    protected $_canFetchTransactionInfo = true;
-    protected $_isGateway = true;
-    protected $_canOrder = true;
-
 
     protected $_canAuthorize = true;
 
     protected $_canCapture = true;
-
-
-    protected $_canVoid = true;
-
-    protected $_canUseInternal = false;
-
     protected $_canUseCheckout = true;
-
-    protected $_canReviewPayment = true;
-
 
 
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
+        if (!$this->_canRefund) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('The refund action is not available.'));
+        }
+        //todo write refund
+
+        return $this;
     }
 }

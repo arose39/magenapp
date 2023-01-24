@@ -13,10 +13,13 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 use Psr\Log\LoggerInterface;
 use Magento\Sales\Model\Service\InvoiceService;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Framework\DB\Transaction;
@@ -24,13 +27,14 @@ use Magento\Framework\DB\Transaction;
 class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     public function __construct(
-        private ResultFactory            $resultFactory,
         private JsonFactory              $jsonFactory,
         private RequestInterface         $request,
         private LoggerInterface          $logger,
         private OrderRepositoryInterface $orderRepository,
         private BuilderInterface         $transactionBuilder,
-        private InvoiceService $invoiceService,
+        private CollectionFactory $invoiceCollectionFactory,
+        private  InvoiceRepositoryInterface $invoiceRepository,
+
     )
     {
     }
@@ -39,7 +43,6 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
     {
 
 
-//$a = 'signature=hQME9PwCv%2B3Wv%2Badfkjvdq3LfpY%3D&data=eyJwYXltZW50X2lkIjoyMTk4MjMxNjAyLCJhY3Rpb24iOiJwYXkiLCJzdGF0dXMiOiJzdWNjZXNzIiwidmVyc2lvbiI6MywidHlwZSI6ImJ1eSIsInBheXR5cGUiOiJjYXJkIiwicHVibGljX2tleSI6InNhbmRib3hfaTczNTk4MzEyMjc3IiwiYWNxX2lkIjo0MTQ5NjMsIm9yZGVyX2lkIjoiNTYiLCJsaXFwYXlfb3JkZXJfaWQiOiJHUzBQUkYxWTE2NzQ0Njk5NDg3OTI5MzQiLCJkZXNjcmlwdGlvbiI6Ik9yZGVyIDU2IGluIG1hZ2VuYXBwIiwic2VuZGVyX2NhcmRfbWFzazIiOiI0MjQyNDIqNDIiLCJzZW5kZXJfY2FyZF9iYW5rIjoiVGVzdCIsInNlbmRlcl9jYXJkX3R5cGUiOiJ2aXNhIiwic2VuZGVyX2NhcmRfY291bnRyeSI6ODA0LCJpcCI6IjkzLjE3NS4yMDAuMTMwIiwiYW1vdW50Ijo0MS44MSwiY3VycmVuY3kiOiJVU0QiLCJzZW5kZXJfY29tbWlzc2lvbiI6MC4wLCJyZWNlaXZlcl9jb21taXNzaW9uIjowLjYzLCJhZ2VudF9jb21taXNzaW9uIjowLjAsImFtb3VudF9kZWJpdCI6MTU2NS45MiwiYW1vdW50X2NyZWRpdCI6MTU2NS45MiwiY29tbWlzc2lvbl9kZWJpdCI6MC4wLCJjb21taXNzaW9uX2NyZWRpdCI6MjMuNDksImN1cnJlbmN5X2RlYml0IjoiVUFIIiwiY3VycmVuY3lfY3JlZGl0IjoiVUFIIiwic2VuZGVyX2JvbnVzIjowLjAsImFtb3VudF9ib251cyI6MC4wLCJtcGlfZWNpIjoiNyIsImlzXzNkcyI6ZmFsc2UsImxhbmd1YWdlIjoidWsiLCJjcmVhdGVfZGF0ZSI6MTY3NDQ2OTk0ODc5NywiZW5kX2RhdGUiOjE2NzQ0Njk5NDg5MDksInRyYW5zYWN0aW9uX2lkIjoyMTk4MjMxNjAyfQ%3D%3D';
 
         $check = $this->checkSignature();
 
@@ -55,17 +58,6 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
             $payment->setAdditionalInformation(
                 [\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS => (array)$paymentData]
             );
-
-//            $invoice = $this->invoiceService->prepareInvoice($order);
-//            $invoice->setRequestedCaptureCase(Invoice::CAPTURE_ONLINE);
-//            $invoice->setState(Invoice::STATE_PAID);
-//            $invoice->setBaseGrandTotal($order->getBaseGrandTotal());
-//            $invoice->register();
-//            $invoice->getOrder()->setIsInProcess(true);
-//            $invoice->pay();
-//            $invoice->save();
-//            $order->setTotalPaid($order->getGrandTotal());
-//            $order->setBaseTotalPaid($order->getBaseGrandTotal());
 
             $formatedPrice = $order->getBaseCurrency()->formatTxt(
                 $order->getGrandTotal()
@@ -90,14 +82,16 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
             );
 
             $payment->setParentTransactionId(null);
-//            $invoice = $payment->getCreatedInvoice();
-//            $invoice = $payment->getCreatedInvoice();
-
 
             $payment->save();
 
             $order->save();
             $transactionId = $transaction->save()->getTransactionId();
+
+            $invoice = $this->getInvoiceByOrder($order);
+            $invoice->setTransactionId($transaction->getTxnId());
+            $this->invoiceRepository->save($invoice);
+
             $payment->registerAuthorizationNotification($order->getGrandTotal());
             $payment->registerCaptureNotification($order->getGrandTotal());
 
@@ -143,5 +137,16 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
         $rightJsonData = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $jsonData);
 
         return json_decode($rightJsonData, true);
+    }
+
+    protected function getInvoiceByOrder($order):InvoiceInterface
+    {
+        /** @var Collection $invoiceCollection */
+        $invoiceCollection = $this->invoiceCollectionFactory->create();
+
+        /** @var InvoiceInterface $invoice */
+        $invoice =  $invoiceCollection->setOrderFilter($order)->setPageSize(1)->getFirstItem();
+
+        return $invoice;
     }
 }
