@@ -348,6 +348,7 @@ return [
         'Mageplaza_Smtp' => 1,
         'Palamarchuk_CatalogCategoriesImportExport' => 1,
         'Palamarchuk_ElogicCreditCard' => 1,
+        'Palamarchuk_ElogicIframePayment' => 1,
         'Palamarchuk_ElogicRedirectPayment' => 1,
         'Palamarchuk_LuxuryTax' => 0,
         'Palamarchuk_StoreLocator' => 1,

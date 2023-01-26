@@ -4,60 +4,56 @@ declare(strict_types=1);
 
 namespace Palamarchuk\ElogicRedirectPayment\Controller\Redirect;
 
-use Magento\Checkout\Model\Session;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
+use Palamarchuk\ElogicRedirectPayment\Api\Sdk\ResponseFieldsInterface;
+use Palamarchuk\ElogicRedirectPayment\Model\Config;
 use Psr\Log\LoggerInterface;
-use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
-use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
-use Magento\Framework\DB\Transaction;
 
 class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     public function __construct(
-        private JsonFactory              $jsonFactory,
-        private RequestInterface         $request,
-        private LoggerInterface          $logger,
-        private OrderRepositoryInterface $orderRepository,
-        private BuilderInterface         $transactionBuilder,
-        private CollectionFactory $invoiceCollectionFactory,
-        private  InvoiceRepositoryInterface $invoiceRepository,
-
+        private JsonFactory                $jsonFactory,
+        private RequestInterface           $request,
+        private LoggerInterface            $logger,
+        private OrderRepositoryInterface   $orderRepository,
+        private BuilderInterface           $transactionBuilder,
+        private CollectionFactory          $invoiceCollectionFactory,
+        private InvoiceRepositoryInterface $invoiceRepository,
+        private Config                     $config
     )
     {
     }
 
     public function execute(): ResultInterface
     {
-
-
-
-        $check = $this->checkSignature();
-
+        $response = $this->jsonFactory->create();
         $data = $this->request->getParam('data');
         $paymentData = $this->decodeData($data);
-        $order = $this->orderRepository->get($paymentData['order_id']);
 
+        if (!$this->checkSignature()) {
+            $this->logger->error('Invalid signature. Payment data :' . json_encode($paymentData));
+            $response->setData(['status' => 'error', 'code' => 400, 'errorMessage' => 'signature not correct']);
 
+            return $response;
+        }
+
+        $order = $this->orderRepository->get($paymentData[ResponseFieldsInterface::ORDER_ID]);
         try {
             $payment = $order->getPayment();
-            $payment->setLastTransId($paymentData['payment_id']);
-            $payment->setTransactionId($paymentData['payment_id']);
-            $payment->setAdditionalInformation(
-                [\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS => (array)$paymentData]
-            );
+            $payment->setLastTransId($paymentData[ResponseFieldsInterface::PAYMENT_ID]);
+            $payment->setTransactionId($paymentData[ResponseFieldsInterface::PAYMENT_ID]);
+            $payment->setAdditionalInformation([\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS => (array)$paymentData]);
 
             $formatedPrice = $order->getBaseCurrency()->formatTxt(
                 $order->getGrandTotal()
@@ -65,43 +61,31 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
             $message = __('The captured amount is %1.', $formatedPrice);
             //get the object of builder class
             $trans = $this->transactionBuilder;
-
             $transaction = $trans->setPayment($payment)
                 ->setOrder($order)
-                ->setTransactionId($paymentData['payment_id'])
-                ->setAdditionalInformation(
-                    [\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS => (array)$paymentData]
-                )
+                ->setTransactionId($paymentData[ResponseFieldsInterface::PAYMENT_ID])
+                ->setAdditionalInformation([\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS => (array)$paymentData])
                 ->setFailSafe(true)
-                //build method creates the transaction and returns the object
                 ->build(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE);
-
             $payment->addTransactionCommentsToOrder(
                 $transaction,
                 $message
             );
-
             $payment->setParentTransactionId(null);
-
             $payment->save();
-
             $order->save();
             $transactionId = $transaction->save()->getTransactionId();
 
             $invoice = $this->getInvoiceByOrder($order);
             $invoice->setTransactionId($transaction->getTxnId());
             $this->invoiceRepository->save($invoice);
-
             $payment->registerAuthorizationNotification($order->getGrandTotal());
             $payment->registerCaptureNotification($order->getGrandTotal());
-
         } catch (\Exception $e) {
-            $err = $e->getMessage();
+            $this->logger->debug($e->getMessage());
         }
 
-        $response = $this->jsonFactory->create();
-        $response->setData(['transaction_id' => $transactionId, 'check' => $check, 'data' => $paymentData, 'order' => $order->getData()]);
-
+        $response->setData(['status' => 'ok', 'code' => 200, 'data' => $paymentData, 'order' => $order->getData()]);
         return $response;
     }
 
@@ -117,11 +101,11 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
 
     private function checkSignature(): bool
     {
-        $publicKey = 'sandbox_i73598312277';
-        $privateKey = 'sandbox_w1l6ghAxhrYGbNRKfPpyodqfjkDFBJYod0wjhJS7';
+        $publicKey = $this->config->getPublicKey();
+        $privateKey = $this->config->getPrivateKey();
         $data = $this->request->getParam('data');
         $signature = $this->request->getParam('signature');
-        $signature = preg_replace('/%3D/', '=', $signature);
+        $signature = urldecode($signature);
         $signatureCheck = base64_encode(sha1($privateKey . $data . $privateKey, true));
 
         return ($signatureCheck === $signature);
@@ -136,16 +120,16 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
         $jsonData = base64_decode($data);
         $rightJsonData = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $jsonData);
 
-        return json_decode($rightJsonData, true);
+        return json_decode($rightJsonData, true, 512, JSON_THROW_ON_ERROR);
     }
 
-    protected function getInvoiceByOrder($order):InvoiceInterface
+    private function getInvoiceByOrder($order): InvoiceInterface
     {
         /** @var Collection $invoiceCollection */
         $invoiceCollection = $this->invoiceCollectionFactory->create();
 
         /** @var InvoiceInterface $invoice */
-        $invoice =  $invoiceCollection->setOrderFilter($order)->setPageSize(1)->getFirstItem();
+        $invoice = $invoiceCollection->setOrderFilter($order)->setPageSize(1)->getFirstItem();
 
         return $invoice;
     }

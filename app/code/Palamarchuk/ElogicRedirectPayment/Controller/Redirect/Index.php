@@ -6,38 +6,41 @@ namespace Palamarchuk\ElogicRedirectPayment\Controller\Redirect;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Palamarchuk\ElogicRedirectPayment\Api\Sdk\ApiUrlInterface;
+use Palamarchuk\ElogicRedirectPayment\Api\Sdk\RequestFieldsInterface;
+use Palamarchuk\ElogicRedirectPayment\Api\Sdk\VersionInterface;
+use Palamarchuk\ElogicRedirectPayment\Model\Config;
 
 class Index implements HttpGetActionInterface
 {
     public function __construct(
         private ResultFactory $resultFactory,
         private Session       $checkoutSession,
+        private Config $config
     )
     {
     }
 
     public function execute(): ResultInterface
     {
-        $publicKey = 'sandbox_i73598312277';
-        $privateKey = 'sandbox_w1l6ghAxhrYGbNRKfPpyodqfjkDFBJYod0wjhJS7';
+        $publicKey = $this->config->getPublicKey();
+        $privateKey =  $this->config->getPrivateKey();
 
-
-        $urlCheckoutLiqPay = "https://www.liqpay.ua/api/3/checkout";
         $order = $this->checkoutSession->getLastRealOrder();
         $data = array(
-            'version' => '3',
-            'public_key' => $publicKey,
-            'action' => 'pay',
-            'amount' => $order->getGrandTotal(),
-            'phone'=> $order->getBillingAddress()->getTelephone(),
-            'currency' => $order->getOrderCurrency()->getCurrencyCode(),
-            'description' => 'Order ' . $order->getId() . ' in magenapp',
-            'order_id' => $order->getId(),
-            "result_url"=>"https://magenapp.dev.com/redirect_payment/redirect/responsehandler",
-            "server_url"=>"https://magenapp.requestcatcher.com/");
+            RequestFieldsInterface::VERSION => VersionInterface::VERSION,
+            RequestFieldsInterface::PUBLIC_KEY => $publicKey,
+            RequestFieldsInterface::ACTION => 'pay',
+            RequestFieldsInterface::AMOUNT => $order->getGrandTotal(),
+            RequestFieldsInterface::PHONE => $order->getBillingAddress()->getTelephone(),
+            RequestFieldsInterface::CURRENCY => $order->getOrderCurrency()->getCurrencyCode(),
+            RequestFieldsInterface::DESCRIPTION => 'Order ' . $order->getId() . ' in magenapp',
+            RequestFieldsInterface::ORDER_ID => $order->getId(),
+            RequestFieldsInterface::RESULT_URL => $this->config->getResultUrl(),
+            RequestFieldsInterface::SERVER_URL => $this->config->getServerUrl(),
+        );
 
         $serializedData = json_encode($data);
         $encryptedData = base64_encode($serializedData);
@@ -47,10 +50,7 @@ class Index implements HttpGetActionInterface
             'data' => $encryptedData,
             'signature' => $signature,
         ]);
-
-
-        $readyUrl = $urlCheckoutLiqPay . '?' . $uri;
-
+        $readyUrl = ApiUrlInterface::API_URL . '?' . $uri;
 
         $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $redirect->setUrl($readyUrl);

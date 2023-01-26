@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <elogic_iframe_payment>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>Palamarchuk\ElogicIframePayment\Model\IframePaymentMethod</model>
+                <active>1</active>
+                <title>Elogic Iframe Payment</title>
+                <can_use_checkout>1</can_use_checkout>
+                <order_status>pending</order_status><!-- set default order status-->
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+            </elogic_iframe_payment>
+        </payment>
+    </default>
+</config>

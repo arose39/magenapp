@@ -1,19 +1,28 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
-<default>
-    <payment>
-        <elogic_redirect_payment>
-            <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
-            <model>Palamarchuk\ElogicRedirectPayment\Model\RedirectPaymentMethod</model>
-            <active>1</active>
-            <title>Elogic Redirect Payment</title>
-            <can_use_checkout>1</can_use_checkout>
-            <order_status>pending</order_status><!-- set default order status-->
-            <can_authorize>1</can_authorize>
-            <can_capture>1</can_capture>
-            <can_refund>1</can_refund>
-        </elogic_redirect_payment>
-    </payment>
-</default>
+    <default>
+        <payment>
+            <elogic_redirect_payment>
+                <payment_action>authorize_capture</payment_action>
+                <active>1</active>
+                <title>Elogic Redirect Payment</title>
+                <order_status>pending_payment</order_status>
+                <model>Palamarchuk\ElogicRedirectPayment\Model\RedirectPaymentMethod</model>
+                <mode>sandbox</mode>
+                <can_use_checkout>1</can_use_checkout>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <debug>1</debug>
+                <result_url></result_url>
+                <server_url></server_url>
+                <sandbox_public_key></sandbox_public_key>
+                <sandbox_private_key></sandbox_private_key>
+                <production_public_key></production_public_key>
+                <production_private_key></production_private_key>
+                <order_prefix></order_prefix>
+            </elogic_redirect_payment>
+        </payment>
+    </default>
 </config>
