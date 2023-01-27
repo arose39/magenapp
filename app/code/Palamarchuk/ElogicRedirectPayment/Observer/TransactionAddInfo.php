@@ -6,9 +6,7 @@ namespace Palamarchuk\ElogicRedirectPayment\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\Data\TransactionInterface;
 use Palamarchuk\ElogicRedirectPayment\Api\Data\PaymentMethodCodeInterface;
 
 class TransactionAddInfo implements ObserverInterface
