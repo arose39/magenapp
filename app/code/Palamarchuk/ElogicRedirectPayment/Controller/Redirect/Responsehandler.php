@@ -10,6 +10,7 @@ use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
@@ -30,7 +31,8 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
         private BuilderInterface           $transactionBuilder,
         private CollectionFactory          $invoiceCollectionFactory,
         private InvoiceRepositoryInterface $invoiceRepository,
-        private Config                     $config
+        private Config                     $config,
+        private Serialize $serialize
     )
     {
     }
@@ -104,6 +106,7 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
         $publicKey = $this->config->getPublicKey();
         $privateKey = $this->config->getPrivateKey();
         $data = $this->request->getParam('data');
+        $data = urldecode($data);
         $signature = $this->request->getParam('signature');
         $signature = urldecode($signature);
         $signatureCheck = base64_encode(sha1($privateKey . $data . $privateKey, true));
@@ -117,8 +120,10 @@ class Responsehandler implements HttpPostActionInterface, CsrfAwareActionInterfa
      */
     private function decodeData(mixed $data): mixed
     {
+        $data= urldecode($data);
         $jsonData = base64_decode($data);
         $rightJsonData = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $jsonData);
+//        $this->serialize->unserialize($rightJsonData);
 
         return json_decode($rightJsonData, true, 512, JSON_THROW_ON_ERROR);
     }
