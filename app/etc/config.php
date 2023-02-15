@@ -350,8 +350,10 @@ return [
         'Palamarchuk_ElogicCreditCard' => 1,
         'Palamarchuk_ElogicIframePayment' => 1,
         'Palamarchuk_ElogicRedirectPayment' => 1,
+        'Palamarchuk_ElogicShippingMethod' => 1,
         'Palamarchuk_LuxuryTax' => 0,
         'Palamarchuk_StoreLocator' => 1,
+        'Palamarchuk_TgOrderNotificationBot' => 1,
         'PayPal_Braintree' => 1,
         'PayPal_BraintreeGraphQl' => 1,
         'Temando_ShippingRemover' => 1
