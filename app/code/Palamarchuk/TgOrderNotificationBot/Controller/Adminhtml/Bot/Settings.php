@@ -51,6 +51,7 @@ class Settings extends Action
     {
         $request = $this->getRequest();
         $this->configWriter->save('tg_order_notification_bot/general/' . 'module_enabled', $request->getParam('enable'));
+        $this->configWriter->save('tg_order_notification_bot/general/' . 'bot_name', $request->getParam('bot_name'));
         $this->configWriter->save('tg_order_notification_bot/general/' . 'access_token', $request->getParam('token'));
         $this->configWriter->save('tg_order_notification_bot/general/' . 'hook', $request->getParam('hook'));
         $this->configWriter->save('tg_order_notification_bot/general/' . 'hook_is_set', 1);

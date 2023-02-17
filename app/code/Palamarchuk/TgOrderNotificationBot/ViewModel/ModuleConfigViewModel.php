@@ -30,6 +30,11 @@ class ModuleConfigViewModel implements ArgumentInterface
         return $this->moduleConfig->getHook();
     }
 
+    public function getBotName(): ?string
+    {
+        return $this->moduleConfig->getBotName();
+    }
+
     public function getAccessToken(): ?string
     {
         return $this->moduleConfig->getAccessToken();

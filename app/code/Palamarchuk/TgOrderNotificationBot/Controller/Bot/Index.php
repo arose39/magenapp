@@ -33,8 +33,6 @@ class Index implements HttpPostActionInterface, CsrfAwareActionInterface
 
     public function execute(): ResultInterface
     {
-        // https://magenapp.dev.com/tgbot/bot
-
         $data = file_get_contents('php://input');
         $arrDataAnswer = json_decode($data, true);
         $urlPost = self::API_URL . "/bot" . $this->config->getAccessToken() . "/". self::API_METHOD;

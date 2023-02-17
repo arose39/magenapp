@@ -14,6 +14,7 @@ class ModuleConfig
     const HOOK_IS_SET = 'hook_is_set';
     const HOOK = 'hook';
     const ACCESS_TOKEN = 'access_token';
+    const BOT_NAME = "bot_name";
 
 
     public function __construct(
@@ -29,6 +30,11 @@ class ModuleConfig
     public function checkHookIsSet(): bool
     {
         return (bool)$this->getConfig('general/' . self::HOOK_IS_SET);
+    }
+
+    public function getBotName(): ?string
+    {
+        return $this->getConfig('general/' . self::BOT_NAME);
     }
 
     public function getHook(): ?string

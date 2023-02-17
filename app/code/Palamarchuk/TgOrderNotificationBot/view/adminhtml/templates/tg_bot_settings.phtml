@@ -60,6 +60,11 @@ $moduleConfigViewModel = $block->getModuleConfigViewModel();
             <option value="1" <?php if($moduleConfigViewModel->moduleIsEnabled()): echo('selected'); endif; ?>>Yes</option>
         </select>
 
+        <label for="bot_name">Bot name (some_name_bot with a _bot postfix)</label>
+        <input type="text" id="bot_name" name="bot_name" placeholder="some_name_bot"
+               value="<?=$moduleConfigViewModel->getBotName()?>"
+        >
+
         <label for="token">Access token</label>
         <input type="text" id="token" name="token" placeholder="Your access token (without bot word)"
                value="<?=$moduleConfigViewModel->getAccessToken()?>"

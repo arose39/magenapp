@@ -5,6 +5,7 @@
         <tg_order_notification_bot>
             <general>
                 <module_enabled>1</module_enabled>
+                <bot_name></bot_name>
                 <access_token></access_token>
                 <hook></hook>
                 <hook_is_set>0</hook_is_set>
