@@ -26,9 +26,22 @@ $moduleConfigViewModel = $block->getModuleConfigViewModel();
         border-radius: 4px;
         cursor: pointer;
     }
+    input[type=submit].delete {
+        width: 100%;
+        background-color: orangered;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
     input[type=submit]:hover {
         background-color: #45a049;
+    }
+    input[type=submit].delete:hover {
+        background-color: darkorchid;
     }
 
     div.botform {
@@ -59,6 +72,19 @@ $moduleConfigViewModel = $block->getModuleConfigViewModel();
         <?php if($moduleConfigViewModel->checkHookIsSet()): echo('<h3 style="color:indianred">Hook is already set</h3>'); endif; ?>
 
         <input type="submit" value="Submit">
+    </form>
+
+</div>
+<div class="botform">
+    <form action="#">
+
+        <?php if($moduleConfigViewModel->checkHookIsSet()):?>
+            <input type="hidden" id="delete" name="delete" value="1" >
+            <input type="hidden" id="token" name="token"
+                   value="<?=$moduleConfigViewModel->getAccessToken()?>"
+            >
+            <input type="submit" class="delete" value="Delete">
+        <?php endif; ?>
     </form>
 
 </div>
