@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <tg_order_notification_bot>
+            <general>
+                <module_enabled>1</module_enabled>
+                <access_token></access_token>
+                <hook></hook>
+                <hook_is_set>0</hook_is_set>
+            </general>
+        </tg_order_notification_bot>
+    </default>
+</config>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Palamarchuk_TgOrderNotificationBot::module" title="Telegram order notification bot" module="Palamarchuk_TgOrderNotificationBot"
+             sortOrder="81"
+             resource="Magento_Backend::system"/>
+        <add id="Palamarchuk_TgOrderNotificationBot::module_configuration" title="Module configuration"
+             module="Palamarchuk_StoreLocator"
+             sortOrder="999" parent="Palamarchuk_TgOrderNotificationBot::module"
+             action="tg_bot/bot/settings"
+             resource="Magento_Backend::system"/>
+    </menu>
+</config>
