@@ -70,7 +70,7 @@ $moduleConfigViewModel = $block->getModuleConfigViewModel();
                value="<?=$moduleConfigViewModel->getAccessToken()?>"
         >
 
-        <label for="hook">Hook ( <b>https://{your domain}/tgbot/bot</b> , or any other request catcher for local development )</label>
+        <label for="hook">Hook ( <b>https://{your domain}/tgbot/bot</b> for instant message handling or <b>https://{your domain}/tg_bot/publishmessage/tgbotpublish</b> for queued via RabbitMQ message handling, or any other request catcher for local development )</label>
         <input type="text" id="hook" name="hook" placeholder="Your hook site"
         value="<?=$moduleConfigViewModel->getHook()?>"
         >
